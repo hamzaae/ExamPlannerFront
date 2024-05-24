@@ -1,3 +1,5 @@
+"use client"
+
 import {
   File,
   ListFilter,
@@ -35,23 +37,28 @@ import {
   TabsContent,
 } from "@/components/ui/tabs"
 import RoomForm from "./RoomForm";
+import { useEffect, useState } from "react"
 
 
   
 
 async function fetchRooms() {
-    const response = await fetch("http://localhost:4000/rooms", {
-      next: {
-        revalidate: 30,
-      }
-    })
-    return response.json()
-  }
+  // const response = await fetch("http://localhost:8080/api/room");
+  // return response.json();
+  return [];
+}
 
+export default function Rooms() {
+  const [rooms, setRooms] = useState([]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const roomsData = await fetchRooms();
+      setRooms(roomsData);
+    };
 
-export default async function Rooms() {
-    const rooms = await fetchRooms()
+    fetchData();
+  }, []);
 
     return (
         <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
@@ -129,7 +136,7 @@ export default async function Rooms() {
                     {rooms.map((room) => (
                         <TableRow>
                         <TableCell className="font-medium">
-                          {room.name}
+                          {room.nameRoom}
                         </TableCell>
                         <TableCell>
                           <Badge variant="outline">{room.type}</Badge>

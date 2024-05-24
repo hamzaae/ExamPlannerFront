@@ -59,12 +59,12 @@ export default function ExamForm() {
 
     return (   
         
-                <Dialog>
-                    
-                <DialogTrigger asChild>
-                    <Badge variant="outline">Empty</Badge>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[825]">
+        <Dialog>
+            
+        <DialogTrigger asChild>
+            <Button >New Exam</Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[825]">
         <DialogHeader>
         <DialogTitle>New exam</DialogTitle>
         <DialogDescription>
@@ -78,13 +78,9 @@ export default function ExamForm() {
             className="relative hidden flex-col items-start gap-8 md:flex" x-chunk="dashboard-03-chunk-0"
           >
             <form className="grid w-full items-start gap-6">
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-4 gap-4">
                     <div className="grid gap-3">
-                      <Label htmlFor="top-p">Title</Label>
-                      <Input id="firstN" placeholder="Java" />
-                    </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="top-k">Type</Label>
+                      <Label htmlFor="top-k">Subject</Label>
                       <Select defaultValue="">
                         <SelectTrigger>
                           <SelectValue placeholder="Select a type" />
@@ -96,14 +92,38 @@ export default function ExamForm() {
                       </Select>
                     </div>
                     <div className="grid gap-3">
-                      <Label htmlFor="top-k">Level</Label>
+                      <Label htmlFor="top-k">Session</Label>
                       <Select defaultValue="">
                         <SelectTrigger>
                           <SelectValue placeholder="Select a level" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="system">AP 1</SelectItem>
-                          <SelectItem value="user">AP 2</SelectItem>
+                          <SelectItem value="system">Normal</SelectItem>
+                          <SelectItem value="user">Ratt</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid gap-3">
+                      <Label htmlFor="top-k">Semester</Label>
+                      <Select defaultValue="">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a level" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="system">Print</SelectItem>
+                          <SelectItem value="user">Autom</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid gap-3">
+                      <Label htmlFor="top-k">Type</Label>
+                      <Select defaultValue="">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a level" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="system">DS 1</SelectItem>
+                          <SelectItem value="user">Exam</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>

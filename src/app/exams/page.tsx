@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import {
+  Car,
   File,
   Home,
   LineChart,
@@ -84,6 +85,7 @@ import {
 import { PopOver } from "./PopOver"
 import ExamForm from "./ExamForm"
 import { DatePicker } from "./DatePicker"
+import { Checkbox } from "@/components/ui/checkbox"
   
 
 
@@ -119,13 +121,13 @@ export default function Exams() {
                           Room 11
                         </TableCell>
                         <TableCell>
-                          <ExamForm />
+                          {/* <ExamForm /> */}
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
                           <PopOver />
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
-                          50
+                          <Checkbox />
                         </TableCell>
                         <TableCell>
                           <PopOver />
@@ -142,7 +144,7 @@ export default function Exams() {
                           Amphie
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
-                          200
+                          <Checkbox />
                         </TableCell>
                         <TableCell>
                           <DropdownMenu>
@@ -167,6 +169,9 @@ export default function Exams() {
                     </TableBody>
                   </Table>
                 </CardContent>
+                <CardFooter>
+                  <ExamForm />
+                </CardFooter>
               </Card>
 
         </div>

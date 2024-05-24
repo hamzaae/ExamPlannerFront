@@ -115,13 +115,14 @@ import { Departements } from "./Departements"
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead>Name</TableHead>
+                          <TableHead>Title</TableHead>
                           <TableHead>Type</TableHead>
+                          <TableHead>Level</TableHead>
                           <TableHead className="hidden md:table-cell">
                             Professor
                           </TableHead>
                           <TableHead className="hidden md:table-cell">
-                            Major
+                            Coordinator
                           </TableHead>
                           <TableHead>
                             <span className="sr-only">Actions</span>

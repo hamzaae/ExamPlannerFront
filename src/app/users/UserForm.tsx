@@ -23,6 +23,10 @@ import { Bird, Rabbit, Turtle } from "lucide-react"
 import { Textarea } from "@/components/ui/textarea"
 
 export function UserForm() {
+
+  
+
+
   return (
 
     <Dialog>
@@ -82,48 +86,22 @@ export function UserForm() {
             </fieldset>
             <fieldset className="grid gap-6 rounded-lg border p-4 ">
               <legend className="-ml-1 px-1 text-sm font-medium">
-                Academic
+                Professor
               </legend>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="grid gap-3">
-                  <Label htmlFor="top-k">Departement</Label>
-                  <Select defaultValue="system">
+              <div className="grid gap-3">
+                <Label htmlFor="role">Speciality</Label>
+                <Select defaultValue="system">
                   <SelectTrigger>
                     <SelectValue placeholder="Select a role" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="system">Departement 1</SelectItem>
-                    <SelectItem value="user">Departement 2</SelectItem>
+                    <SelectItem value="system">Spec 1</SelectItem>
+                    <SelectItem value="user">Spec 2</SelectItem>
                   </SelectContent>
                 </Select>
-                </div>
-                <div className="grid gap-3">
-                  <Label htmlFor="top-p">Subjects</Label>
-                  <Select defaultValue="system">
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="system">subject 1</SelectItem>
-                    <SelectItem value="user">subject 2</SelectItem>
-                  </SelectContent>
-                </Select>
-                </div>
-                <div className="grid gap-3">
-                  <Label htmlFor="top-k">Groups</Label>
-                  <Select defaultValue="system">
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="system">Group 1</SelectItem>
-                    <SelectItem value="user">Group 2</SelectItem>
-                  </SelectContent>
-                </Select>
-                </div>
               </div>
             </fieldset>
-            <fieldset className="grid gap-6 rounded-lg border p-4 hidden">
+            <fieldset className="grid gap-6 rounded-lg border p-4 ">
               <legend className="-ml-1 px-1 text-sm font-medium">
                 Administartif
               </legend>

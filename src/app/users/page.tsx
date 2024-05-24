@@ -42,7 +42,7 @@ import { UserForm } from "./UserForm"
 import { GroupForm } from "./GroupForm"
   
 async function fetchUsers() {
-    // const response = await fetch("http://localhost:4001/users", {
+    // const response = await fetch("http://localhost:8080/api/personnel", {
     //   next: {
     //     revalidate: 30,
     //   }
@@ -104,9 +104,12 @@ export default async function Users() {
                 <TableHeader>
                     <TableRow>
                     <TableHead>Full Name</TableHead>
-                    <TableHead>Type</TableHead>
+                    <TableHead className="hidden md:table-cell">Type</TableHead>
                     <TableHead className="hidden md:table-cell">
                         Speciality / Grade
+                    </TableHead>
+                    <TableHead className="hidden md:table-cell">
+                        CIN
                     </TableHead>
                     <TableHead className="hidden md:table-cell">
                         Email
@@ -126,7 +129,7 @@ export default async function Users() {
                           <Badge variant="outline">{user.type}</Badge>
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
-                          {user.speciality}
+                          {user.speciality}{user.grade}
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
                           {user.email}
