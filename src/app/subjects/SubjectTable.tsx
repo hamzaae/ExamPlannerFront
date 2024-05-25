@@ -24,6 +24,7 @@ import {
   } from "@/components/ui/table"
 
   import { useRouter } from "next/navigation"
+import { SubjectUpdate } from "./SubjectUpdate"
 
 const SubjectTable = ({subjects}) => {
 
@@ -74,7 +75,7 @@ const SubjectTable = ({subjects}) => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                  <DropdownMenuItem>Edit</DropdownMenuItem>
+                  <SubjectUpdate subject={subject}/>
                   <DropdownMenuItem onClick={() => handleClick(subject.id)}>Delete</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

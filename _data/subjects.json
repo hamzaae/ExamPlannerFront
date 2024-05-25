@@ -13,8 +13,16 @@
       "title": "nlp",
       "type": "system",
       "level": "system",
-      "professor": "system",
-      "coordinator": "system"
+      "professor": "2",
+      "coordinator": "4dcb"
+    },
+    {
+      "id": "2068",
+      "title": "hello",
+      "type": "",
+      "level": "",
+      "professor": "2",
+      "coordinator": "4dcb"
     }
   ]
 }

@@ -45,7 +45,7 @@ import UserTable from "./UserTable"
 
 export default function Users() {
 
-    const { error, isPending, data: users } = useFetch('http://localhost:4001/users')
+    const { error, isPending, data: users } = useFetch('http://localhost:4002/users')
 
 
     return (

@@ -23,50 +23,55 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-type Status = {
-  value: string
-  label: string
-}
+type User = (typeof users)[number]
 
-const statuses: Status[] = [
-  {
-    value: "backlog",
-    label: "Backlog",
-  },
-  {
-    value: "todo",
-    label: "Todo",
-  },
-  {
-    value: "in progress",
-    label: "In Progress",
-  },
-  {
-    value: "done",
-    label: "Done",
-  },
-  {
-    value: "canceled",
-    label: "Canceled",
-  },
-]
+// const users: Status[] = [
+//   {
+//     value: "backlog",
+//     label: "Backlog",
+//   },
+//   {
+//     value: "todo",
+//     label: "Todo",
+//   },
+//   {
+//     value: "in progress",
+//     label: "In Progress",
+//   },
+//   {
+//     value: "done",
+//     label: "Done",
+//   },
+//   {
+//     value: "canceled",
+//     label: "Canceled",
+//   },
+// ]
 
-export function ComboList() {
+export function ComboList({
+  users,
+  setSelectedStatus,
+  selectedStatus
+}: {
+  users: User[];
+  setSelectedStatus: (status: User | null) => void;
+  selectedStatus: User | null;
+}) {
   const [open, setOpen] = React.useState(false)
-  const [selectedStatus, setSelectedStatus] = React.useState<Status | null>(
-    null
-  )
+  // const [selectedStatus, setSelectedStatus] = React.useState<User | null>(
+  //   null
+  // )
 
 
     return (
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant="outline" className="w-[150px] justify-start">
-            {selectedStatus ? <>{selectedStatus.label}</> : <>Choose Professor</>}
+            {selectedStatus ? <>{selectedStatus.lastName}</> : <>Choose Professor</>}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0" align="start">
-          <StatusList setOpen={setOpen} setSelectedStatus={setSelectedStatus} />
+          <StatusList users={users} setOpen={setOpen} setSelectedStatus={setSelectedStatus} />
         </PopoverContent>
       </Popover>
     )
@@ -74,11 +79,13 @@ export function ComboList() {
 }
 
 function StatusList({
+  users,
   setOpen,
   setSelectedStatus,
 }: {
+  users: User[];
   setOpen: (open: boolean) => void
-  setSelectedStatus: (status: Status | null) => void
+  setSelectedStatus: (status: User | null) => void
 }) {
   return (
     <Command>
@@ -86,18 +93,18 @@ function StatusList({
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup>
-          {statuses.map((status) => (
+          {users.map((user) => (
             <CommandItem
-              key={status.value}
-              value={status.value}
+              key={user.id}
+              value={user.id}
               onSelect={(value) => {
                 setSelectedStatus(
-                  statuses.find((priority) => priority.value === value) || null
+                  users.find((user) => user.id === value) || null
                 )
                 setOpen(false)
               }}
             >
-              {status.label}
+              {user.firstName + " " + user.lastName}
             </CommandItem>
           ))}
         </CommandGroup>

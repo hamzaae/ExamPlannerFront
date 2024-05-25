@@ -1,7 +1,5 @@
-"use client"
 
 import { Button } from "@/components/ui/button"
-
 import { Input } from "@/components/ui/input"
 import {
     Dialog,
@@ -20,39 +18,39 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select"
-import { Bird, Rabbit, Turtle } from "lucide-react"
-import { Textarea } from "@/components/ui/textarea"
+
+import { use, useState } from "react"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu"
+import { Badge } from "@/components/ui/badge"
 import { ComboList } from "./ComboList"
 
-
-export function SubjectForm({users}) {
+export function SubjectUpdate({ subject }) {
 
   const router = useRouter()
 
-  const [title, setTitle] = useState('');
-  const [type, setType] = useState('');
-  const [level, setLevel] = useState('');
-  const [professor, setProfessor] = useState(null);
-  const [coordinator, setCoordinator] = useState(null);
+  const [title, setTitle] = useState(subject.title || "");
+  const [type, setType] = useState(subject.type || "");
+  const [level, setLevel] = useState(subject.level || "");
+  const [professor, setProfessor] = useState(subject.professor || "");
+  const [coordinator, setCoordinator] = useState(subject.coordinator || "");
   const [loading, setLoading] = useState(false);
 
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true);
-    const response = await fetch("http://localhost:4001/subjects", {
-        method: "POST",
+    const response = await fetch("http://localhost:4001/users/" + subject.id, {
+        method: "PUT",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          "title": title,
-          "type": type,
-          "level": level,
-          "professor": professor?.id || null,
-          "coordinator": coordinator?.id || null
+            "title": title,
+            "type": type,
+            "level": level,
+            "professor": professor,
+            "coordinator": coordinator
         }),
     })
     if (response.ok) {
@@ -62,12 +60,16 @@ export function SubjectForm({users}) {
 
 }
 
-
   return (
 
     <Dialog>
     <DialogTrigger asChild>
-        <Button variant="outline">Add Subject</Button>
+    <DropdownMenuItem
+        onSelect={(event) => {
+          event.preventDefault();
+          event.stopPropagation();
+        }}
+        >Edit</DropdownMenuItem>
     </DialogTrigger>
     <DialogContent className="sm:max-w-[825]">
         <DialogHeader>
@@ -95,8 +97,8 @@ export function SubjectForm({users}) {
                           <SelectValue placeholder="Select a type" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="system">Subject</SelectItem>
-                          <SelectItem value="user">Sub Subject</SelectItem>
+                          <SelectItem value="subject">Subject</SelectItem>
+                          <SelectItem value="subsubject">Sub Subject</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -128,7 +130,7 @@ export function SubjectForm({users}) {
                         </SelectContent>
                       </Select> */}
                       {/* <ComboSelect /> */}
-                      {users && <ComboList users={users} setSelectedStatus={setProfessor} selectedStatus={professor}/>}
+                      <ComboList />
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Coordinator</Label>
@@ -142,7 +144,7 @@ export function SubjectForm({users}) {
                           <SelectItem value="user">coord 2</SelectItem>
                         </SelectContent>
                       </Select> */}
-                      {users && <ComboList users={users} setSelectedStatus={setCoordinator} selectedStatus={coordinator}/>}
+                      <ComboList />
                     </div>
               </div>
 
@@ -152,7 +154,6 @@ export function SubjectForm({users}) {
 
     </DialogContent>
     </Dialog>
-
 
 
   )
