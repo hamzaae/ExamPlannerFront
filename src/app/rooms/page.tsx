@@ -39,6 +39,7 @@ import {
 import RoomForm from "./RoomForm";
 import useFetch from "../useFetch"
 import RoomTable from "./RoomTable"
+import { Skeleton } from "@/components/ui/skeleton"
 
 
 
@@ -85,7 +86,7 @@ export default function Rooms() {
               </div>
 
 
-              <Card x-chunk="dashboard-06-chunk-0">
+              {rooms && <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
                   <CardTitle>Rooms</CardTitle>
                   <CardDescription>
@@ -109,7 +110,7 @@ export default function Rooms() {
                         </TableHead>
                       </TableRow>
                     </TableHeader>
-                    {rooms && <RoomTable rooms={rooms} />}
+                    <RoomTable rooms={rooms} />
                   </Table>
                 </CardContent>
                 <CardFooter>
@@ -118,9 +119,19 @@ export default function Rooms() {
                     rooms.
                   </div>
                 </CardFooter>
-              </Card>
-
-
+              </Card> }
+              {error && <div className="text-red-500">{error}</div>}
+              {isPending && (
+                <div className="fixed inset-0 flex items-center justify-center bg-gray-200 ">
+                  <div className="flex flex-col items-center space-y-3">
+                    <Skeleton className="h-[325px] w-[750px] rounded-xl" />
+                    <div className="space-y-2">
+                      <Skeleton className="h-4 w-[750px]" />
+                      <Skeleton className="h-4 w-[700px]" />
+                    </div>
+                  </div>
+                </div>
+              )}
         </div>
     )
   }

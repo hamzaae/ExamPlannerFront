@@ -35,7 +35,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-
+import { Skeleton } from "@/components/ui/skeleton"
 
 import { UserForm } from "./UserForm"
 import { GroupForm } from "./GroupForm"
@@ -80,7 +80,7 @@ export default function Users() {
                   </span>
                 </Button>
                 <UserForm />
-                <GroupForm />
+                <GroupForm users={users} />
 
               </div>
             </div>
@@ -123,7 +123,17 @@ export default function Users() {
             </CardFooter>
             </Card> }
             {error && <div>{error}</div>}
-            {isPending && <div>Loading...</div>}
+            {isPending && (
+              <div className="fixed inset-0 flex items-center justify-center bg-gray-200 ">
+                <div className="flex flex-col items-center space-y-3">
+                  <Skeleton className="h-[325px] w-[750px] rounded-xl" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-[750px]" />
+                    <Skeleton className="h-4 w-[700px]" />
+                  </div>
+                </div>
+              </div>
+            )}
         </div>
     )
   }

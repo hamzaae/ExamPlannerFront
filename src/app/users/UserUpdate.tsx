@@ -19,21 +19,22 @@ import {
     SelectValue,
   } from "@/components/ui/select"
 
-import { useState } from "react"
+import { use, useState } from "react"
 import { useRouter } from "next/navigation"
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu"
+import { Badge } from "@/components/ui/badge"
 
-export function UserUpdate() {
+export function UserUpdate({ user }) {
 
   const router = useRouter()
 
-  const [selectedRole, setSelectedRole] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [cin, setCin] = useState('');
-  const [email, setEmail] = useState('');
-  const [grade, setGrade] = useState('');
-  const [speciality, setSpeciality] = useState('');
+  const [selectedRole, setSelectedRole] = useState(user.type || "");
+  const [firstName, setFirstName] = useState(user.firstName || "");
+  const [lastName, setLastName] = useState(user.lastName || "");
+  const [cin, setCin] = useState(user.cin || "");
+  const [email, setEmail] = useState(user.email || "");
+  const [grade, setGrade] = useState(user.grade || "");
+  const [speciality, setSpeciality] = useState(user.speciality || "");
   const [loading, setLoading] = useState(false);
 
   const handleRoleChange = (value) => {
@@ -43,8 +44,8 @@ export function UserUpdate() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true);
-    const response = await fetch("http://localhost:4001/users", {
-        method: "POST",
+    const response = await fetch("http://localhost:4001/users/" + user.id, {
+        method: "PUT",
         headers: {
             "Content-Type": "application/json",
         },
@@ -59,7 +60,8 @@ export function UserUpdate() {
         }),
     })
     if (response.ok) {
-      router.push("/users")
+      router.push("/users");
+      window.location.reload();
     }
 
 }
@@ -68,7 +70,12 @@ export function UserUpdate() {
 
     <Dialog>
     <DialogTrigger asChild>
-        <DropdownMenuItem>Edit</DropdownMenuItem>
+        <DropdownMenuItem
+        onSelect={(event) => {
+          event.preventDefault();
+          event.stopPropagation();
+        }}
+        >Edit</DropdownMenuItem>
     </DialogTrigger>
     <DialogContent className="sm:max-w-[825]">
         <DialogHeader>
@@ -113,13 +120,13 @@ export function UserUpdate() {
                 </div>
                 <div className="grid gap-3">
                     <Label htmlFor="top-k">Role</Label>
-                    <Select name="role" value={selectedRole} onValueChange={handleRoleChange}>
+                    <Select disabled name="role" value={selectedRole} onValueChange={handleRoleChange}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select a role" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="professor">Professor</SelectItem>
-                      <SelectItem value="admin">Administrator</SelectItem>
+                      <SelectItem value="administrator">Administrator</SelectItem>
                     </SelectContent>
                   </Select>
                   </div>
@@ -145,7 +152,7 @@ export function UserUpdate() {
                 </Select>
               </div>
             </fieldset>
-            <fieldset className={`admin grid gap-6 rounded-lg border p-4 ${selectedRole === 'admin' ? '' : 'hidden'}`}>
+            <fieldset className={`administrator grid gap-6 rounded-lg border p-4 ${selectedRole === 'administrator' ? '' : 'hidden'}`}>
               <legend className="-ml-1 px-1 text-sm font-medium">
                 Administartor
               </legend>
@@ -159,7 +166,7 @@ export function UserUpdate() {
                   <SelectContent>
                     <SelectItem value="director">Director</SelectItem>
                     <SelectItem value="coordinator">Coordinator</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
+                    <SelectItem value="administrator">Admin</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

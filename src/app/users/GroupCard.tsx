@@ -32,41 +32,17 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-const users = [
-    {
-        name: "Olivia Martin",
-        email: "m@example.com",
-        avatar: "/avatars/01.png",
-    },
-    {
-        name: "Isabella Nguyen",
-        email: "isabella.nguyen@email.com",
-        avatar: "/avatars/03.png",
-    },
-    {
-        name: "Emma Wilson",
-        email: "emma@example.com",
-        avatar: "/avatars/05.png",
-    },
-    {
-        name: "Jackson Lee",
-        email: "lee@example.com",
-        avatar: "/avatars/02.png",
-    },
-    {
-        name: "William Kim",
-        email: "will@email.com",
-        avatar: "/avatars/04.png",
-    },
-] as const
 
 type User = (typeof users)[number]
 
-export function GroupCard() {
+export function GroupCard({ users, onSelectedMembersChange }) {
     const [open, setOpen] = React.useState(false)
     const [selectedUsers, setSelectedUsers] = React.useState<User[]>([])
 
-
+    const handleClick = (e) => {
+        e.preventDefault(); 
+        setOpen(true);
+    };
 
     return (
         <>
@@ -77,7 +53,7 @@ export function GroupCard() {
                             size="icon"
                             variant="outline"
                             className="ml-auto rounded-full"
-                            onClick={() => setOpen(true)}
+                            onClick={handleClick}
                         >
                             <Plus className="h-4 w-4" />
                             <span className="sr-only">Add Members</span>
@@ -120,12 +96,12 @@ export function GroupCard() {
                                         }}
                                     >
                                         <Avatar>
-                                            <AvatarImage src={user.avatar} alt="Image" />
-                                            <AvatarFallback>{user.name[0]}</AvatarFallback>
+                                            {/* <AvatarImage src={user.avatar} alt="Image" /> */}
+                                            <AvatarFallback>{user.lastName[0]}</AvatarFallback>
                                         </Avatar>
                                         <div className="ml-2">
                                             <p className="text-sm font-medium leading-none">
-                                                {user.name}
+                                                {user.firstName + " " + user.lastName}
                                             </p>
                                             <p className="text-sm text-muted-foreground">
                                                 {user.email}
@@ -147,8 +123,8 @@ export function GroupCard() {
                                         key={user.email}
                                         className="inline-block border-2 border-background"
                                     >
-                                        <AvatarImage src={user.avatar} />
-                                        <AvatarFallback>{user.name[0]}</AvatarFallback>
+                                        {/* <AvatarImage src={user.avatar} /> */}
+                                        <AvatarFallback>{user.lastName[0]}</AvatarFallback>
                                     </Avatar>
                                 ))}
                             </div>
@@ -158,9 +134,11 @@ export function GroupCard() {
                             </p>
                         )}
                         <Button
-                            disabled={selectedUsers.length < 2}
+                            disabled={selectedUsers.length < 1}
                             onClick={() => {
-                                setOpen(false)
+                                const selectedMemberIds = selectedUsers.map(user => user.id);
+                                onSelectedMembersChange(selectedMemberIds);
+                                setOpen(false);
                             }}
                         >
                             Continue

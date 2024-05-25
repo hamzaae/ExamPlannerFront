@@ -120,7 +120,7 @@ export function UserForm() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="professor">Professor</SelectItem>
-                      <SelectItem value="admin">Administrator</SelectItem>
+                      <SelectItem value="administrator">Administrator</SelectItem>
                     </SelectContent>
                   </Select>
                   </div>
@@ -146,7 +146,7 @@ export function UserForm() {
                 </Select>
               </div>
             </fieldset>
-            <fieldset className={`admin grid gap-6 rounded-lg border p-4 ${selectedRole === 'admin' ? '' : 'hidden'}`}>
+            <fieldset className={`administrator grid gap-6 rounded-lg border p-4 ${selectedRole === 'administrator' ? '' : 'hidden'}`}>
               <legend className="-ml-1 px-1 text-sm font-medium">
                 Administartor
               </legend>
@@ -160,7 +160,7 @@ export function UserForm() {
                   <SelectContent>
                     <SelectItem value="director">Director</SelectItem>
                     <SelectItem value="coordinator">Coordinator</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
+                    <SelectItem value="administrator">Admin</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

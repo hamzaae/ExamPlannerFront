@@ -1,0 +1,10 @@
+{
+  "groups": [
+    {
+      "id": "1",
+      "name": "mygrp",
+      "description": "balblbaa test blaa",
+      "members": []
+    }
+  ]
+}

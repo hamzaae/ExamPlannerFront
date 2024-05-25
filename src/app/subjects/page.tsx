@@ -45,6 +45,7 @@ import useFetch from "../useFetch"
 import { Sub } from "@radix-ui/react-dropdown-menu"
 import SubjectTable from "./SubjectTable"
 import { Input } from "@/components/ui/input"
+import { Skeleton } from "@/components/ui/skeleton"
   
   
   
@@ -90,7 +91,7 @@ import { Input } from "@/components/ui/input"
                   <Departements />
                   <SubjectForm />
                 </div>
-                <Card x-chunk="dashboard-06-chunk-0">
+                {subjects && <Card x-chunk="dashboard-06-chunk-0">
                   <CardHeader>
                     <CardTitle>Subjects</CardTitle>
                     <CardDescription>
@@ -123,7 +124,7 @@ import { Input } from "@/components/ui/input"
                           </TableHead>
                         </TableRow>
                       </TableHeader>
-                      {subjects && <SubjectTable subjects={subjects} />}
+                       <SubjectTable subjects={subjects} />
                     </Table>
                   </CardContent>
                   <CardFooter>
@@ -132,7 +133,19 @@ import { Input } from "@/components/ui/input"
                       subjects.
                     </div>
                   </CardFooter>
-                </Card>
+                </Card> }
+                {error && <div className="text-red-500">{error}</div>}
+                {isPending && (
+                  <div className="fixed inset-0 flex items-center justify-center bg-gray-200 ">
+                    <div className="flex flex-col items-center space-y-3">
+                      <Skeleton className="h-[325px] w-[750px] rounded-xl" />
+                      <div className="space-y-2">
+                        <Skeleton className="h-4 w-[750px]" />
+                        <Skeleton className="h-4 w-[700px]" />
+                      </div>
+                    </div>
+                  </div>
+                )}
           </div>
       )
     }

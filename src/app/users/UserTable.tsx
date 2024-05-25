@@ -74,7 +74,7 @@ const UserTable = ({users}) => {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                      <UserUpdate />
+                      <UserUpdate user={user}/>
                       <DropdownMenuItem onClick={() => handleClick(user.id)}>Delete</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
