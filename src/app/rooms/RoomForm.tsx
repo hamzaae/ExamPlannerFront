@@ -39,7 +39,7 @@ export default function RoomForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const response = await fetch("http://localhost:4000/rooms", {
+        const response = await fetch("http://localhost:4001/rooms", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -52,7 +52,9 @@ export default function RoomForm() {
             }),
         })
         if (response.ok) {
-            router.push("/rooms")
+            router.push("/rooms");
+            window.location.reload();
+
         }
     }
 

@@ -8,13 +8,6 @@
       "place": "Bloc A"
     },
     {
-      "name": "Room 2",
-      "id": "2",
-      "size": 60,
-      "type": "room",
-      "place": "Bloc B"
-    },
-    {
       "name": "Amphie A",
       "id": "3",
       "size": 200,
@@ -27,6 +20,13 @@
       "size": 20,
       "type": "Tp",
       "place": "Bloc A"
+    },
+    {
+      "id": "f510",
+      "name": "Room 5",
+      "type": "Tp",
+      "place": "Block B",
+      "size": 10
     }
   ]
 }

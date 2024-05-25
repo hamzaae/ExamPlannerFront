@@ -1,6 +1,5 @@
 
 import { Button } from "@/components/ui/button"
-
 import { Input } from "@/components/ui/input"
 import {
     Dialog,
@@ -21,9 +20,10 @@ import {
   } from "@/components/ui/select"
 
 import { useState } from "react"
-import { redirect, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu"
 
-export function UserForm() {
+export function UserUpdate() {
 
   const router = useRouter()
 
@@ -59,8 +59,7 @@ export function UserForm() {
         }),
     })
     if (response.ok) {
-      router.push("/users");
-      window.location.reload();
+      router.push("/users")
     }
 
 }
@@ -69,11 +68,11 @@ export function UserForm() {
 
     <Dialog>
     <DialogTrigger asChild>
-        <Button variant="outline">Add User</Button>
+        <DropdownMenuItem>Edit</DropdownMenuItem>
     </DialogTrigger>
     <DialogContent className="sm:max-w-[825]">
         <DialogHeader>
-        <DialogTitle>Add User</DialogTitle>
+        <DialogTitle>Update User</DialogTitle>
         <DialogDescription>
             Insert user infos here. Click save when you're done.
         </DialogDescription>

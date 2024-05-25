@@ -1,20 +1,23 @@
 {
-    "users": [
-        {
-            "id": 1,
-            "firstName": "John",
-            "lastName": "Doe",
-            "email": "jhon@gmail.com",
-            "speciality": "ID",
-            "type": "Professor"
-        },
-        {
-            "id": 2,
-            "firstName": "mstafa",
-            "lastName": "belhaj",
-            "email": "mstafa@gmail.com",
-            "speciality": "GEE",
-            "type": "Administrator"
-        }
-    ]
+  "users": [
+    {
+      "id": "2",
+      "firstName": "mstafa",
+      "lastName": "belhaj",
+      "email": "mstafa@gmail.com",
+      "speciality": "GEE",
+      "type": "Administrator",
+      "cin": "B22222"
+    },
+    {
+      "id": "4dcb",
+      "type": "professor",
+      "firstName": "hamza",
+      "lastName": "MOTASSIM",
+      "cin": "A111111",
+      "email": "mail@gmail.com",
+      "grade": "",
+      "speciality": "civil"
+    }
+  ]
 }

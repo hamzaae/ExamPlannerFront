@@ -1,7 +1,10 @@
+"use client"
+
 import {
     File,
     ListFilter,
     MoreHorizontal,
+    Search,
   } from "lucide-react"
   import { Badge } from "@/components/ui/badge"
   import { Button } from "@/components/ui/button"
@@ -38,39 +41,24 @@ import { SubjectForm } from "./SubjectForm";
 import { CarouselCard } from "./CarouselCard"
 import { TabsCard } from "./TabsCard"
 import { Departements } from "./Departements"
+import useFetch from "../useFetch"
+import { Sub } from "@radix-ui/react-dropdown-menu"
+import SubjectTable from "./SubjectTable"
+import { Input } from "@/components/ui/input"
   
   
+  
+  
+  export default function Subjects() {
+    const { error, isPending, data: subjects } = useFetch('http://localhost:4001/subjects')
     
-  
-  async function fetchSubjects() {
-      const response = await fetch("http://localhost:4000/rooms", {
-        next: {
-          revalidate: 30,
-        }
-      })
-      return response.json()
-    }
-  
-  
-  
-  export default async function Subjects() {
-      const rooms = await fetchSubjects()
-  
+    
       return (
           <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
-              <div className="justify-center items-center">
+              {/* <div className="justify-center items-center">
                 
-              </div>
-              <Tabs defaultValue="all">
-              <div className="flex items-center">
-                {/* <TabsList>
-                  <TabsTrigger value="all">All</TabsTrigger>
-                  <TabsTrigger value="active">Active</TabsTrigger>
-                  <TabsTrigger value="draft">Draft</TabsTrigger>
-                  <TabsTrigger value="archived" className="hidden sm:flex">
-                    Archived
-                  </TabsTrigger>
-                </TabsList> */}
+              </div> */}
+
                 <div className="ml-auto flex items-center gap-2">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -102,14 +90,20 @@ import { Departements } from "./Departements"
                   <Departements />
                   <SubjectForm />
                 </div>
-              </div>
-              <TabsContent value="all">
                 <Card x-chunk="dashboard-06-chunk-0">
                   <CardHeader>
                     <CardTitle>Subjects</CardTitle>
                     <CardDescription>
                       Manage subjects.
                     </CardDescription>
+                    <div className="relative ml-auto flex-1 md:grow-0">
+                      <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        type="search"
+                        placeholder="Search..."
+                        className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
+                      />
+                    </div>
                   </CardHeader>
                   <CardContent>
                     <Table>
@@ -129,56 +123,16 @@ import { Departements } from "./Departements"
                           </TableHead>
                         </TableRow>
                       </TableHeader>
-                      <TableBody>
-  
-                      {rooms.map((room) => (
-                          <TableRow>
-                          <TableCell className="font-medium">
-                            {room.name}
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant="outline">{room.type}</Badge>
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            {room.place}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            {room.size}
-                          </TableCell>
-                          <TableCell>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button
-                                  aria-haspopup="true"
-                                  size="icon"
-                                  variant="ghost"
-                                >
-                                  <MoreHorizontal className="h-4 w-4" />
-                                  <span className="sr-only">Toggle menu</span>
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                <DropdownMenuItem>Edit</DropdownMenuItem>
-                                <DropdownMenuItem>Delete</DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </TableCell>
-                        </TableRow>
-                        ))}
-  
-                      </TableBody>
+                      {subjects && <SubjectTable subjects={subjects} />}
                     </Table>
                   </CardContent>
                   <CardFooter>
                     <div className="text-xs text-muted-foreground">
-                      Showing <strong>all</strong> of <strong>{rooms.length}</strong>{" "}
+                      Showing <strong>all</strong> of <strong>{subjects && subjects.length}</strong>{" "}
                       subjects.
                     </div>
                   </CardFooter>
                 </Card>
-              </TabsContent>
-            </Tabs>
           </div>
       )
     }

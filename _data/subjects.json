@@ -1,0 +1,20 @@
+{
+  "subjects": [
+    {
+      "id": "1",
+      "title": "Java",
+      "professor": "belhaj",
+      "coordinator": "mstafa",
+      "level": "ID 1",
+      "type": "Subject"
+    },
+    {
+      "id": "66d8",
+      "title": "nlp",
+      "type": "system",
+      "level": "system",
+      "professor": "system",
+      "coordinator": "system"
+    }
+  ]
+}

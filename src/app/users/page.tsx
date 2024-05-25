@@ -35,28 +35,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+
 
 import { UserForm } from "./UserForm"
 import { GroupForm } from "./GroupForm"
-  
-async function fetchUsers() {
-    // const response = await fetch("http://localhost:8080/api/personnel", {
-    //   next: {
-    //     revalidate: 30,
-    //   }
-    // })
-
-    // return response.json()
-    return []
-  }
+import useFetch from "../useFetch"
+import UserTable from "./UserTable"
 
 
-export default async function Users() {
+export default function Users() {
 
-    const users = await fetchUsers()
+    const { error, isPending, data: users } = useFetch('http://localhost:4001/users')
+
+
     return (
+      
         <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
             <div className="flex items-center">
               <div className="ml-auto flex items-center gap-2">
@@ -91,7 +84,7 @@ export default async function Users() {
 
               </div>
             </div>
-
+            {users && 
             <Card x-chunk="dashboard-06-chunk-0">
             <CardHeader>
                 <CardTitle>Users</CardTitle>
@@ -119,52 +112,18 @@ export default async function Users() {
                     </TableHead>
                     </TableRow>
                 </TableHeader>
-                <TableBody>
-                {users.map((user) => (
-                        <TableRow key={user.id}>
-                        <TableCell className="font-medium">
-                          {user.firstName + " " + user.lastName}
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">{user.type}</Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          {user.speciality}{user.grade}
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          {user.email}
-                        </TableCell>
-                        <TableCell>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                aria-haspopup="true"
-                                size="icon"
-                                variant="ghost"
-                              >
-                                <MoreHorizontal className="h-4 w-4" />
-                                <span className="sr-only">Toggle menu</span>
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                              <DropdownMenuItem>Edit</DropdownMenuItem>
-                              <DropdownMenuItem>Delete</DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                      ))}
-                </TableBody>
+                  {users && <UserTable users={users}/>}
                 </Table>
             </CardContent>
             <CardFooter>
                 <div className="text-xs text-muted-foreground">
-                Showing <strong>all</strong> of <strong>{users.length}</strong>{" "}
+                Showing <strong>all</strong> of <strong>{users && users.length}</strong>{" "}
                 users.
                 </div>
             </CardFooter>
-            </Card>
+            </Card> }
+            {error && <div>{error}</div>}
+            {isPending && <div>Loading...</div>}
         </div>
     )
   }
