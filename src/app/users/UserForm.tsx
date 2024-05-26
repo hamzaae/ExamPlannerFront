@@ -43,7 +43,7 @@ export function UserForm() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true);
-    const response = await fetch("http://localhost:4001/users", {
+    const response = await fetch("http://localhost:8080/api/personnel", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -119,14 +119,14 @@ export function UserForm() {
                       <SelectValue placeholder="Select a role" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="professor">Professor</SelectItem>
-                      <SelectItem value="administrator">Administrator</SelectItem>
+                      <SelectItem value="Professor">Professor</SelectItem>
+                      <SelectItem value="Administrator">Administrator</SelectItem>
                     </SelectContent>
                   </Select>
                   </div>
                 </div>
             </fieldset>
-            <fieldset className={`professor grid gap-6 rounded-lg border p-4 ${selectedRole === 'professor' ? '' : 'hidden'}`}>
+            <fieldset className={`Professor grid gap-6 rounded-lg border p-4 ${selectedRole === 'Professor' ? '' : 'hidden'}`}>
               <legend className="-ml-1 px-1 text-sm font-medium">
                 Professor
               </legend>
@@ -146,7 +146,7 @@ export function UserForm() {
                 </Select>
               </div>
             </fieldset>
-            <fieldset className={`administrator grid gap-6 rounded-lg border p-4 ${selectedRole === 'administrator' ? '' : 'hidden'}`}>
+            <fieldset className={`Administrator grid gap-6 rounded-lg border p-4 ${selectedRole === 'Administrator' ? '' : 'hidden'}`}>
               <legend className="-ml-1 px-1 text-sm font-medium">
                 Administartor
               </legend>

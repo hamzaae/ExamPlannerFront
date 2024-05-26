@@ -25,28 +25,6 @@ import {
 
 type User = (typeof users)[number]
 
-// const users: Status[] = [
-//   {
-//     value: "backlog",
-//     label: "Backlog",
-//   },
-//   {
-//     value: "todo",
-//     label: "Todo",
-//   },
-//   {
-//     value: "in progress",
-//     label: "In Progress",
-//   },
-//   {
-//     value: "done",
-//     label: "Done",
-//   },
-//   {
-//     value: "canceled",
-//     label: "Canceled",
-//   },
-// ]
 
 export function ComboList({
   users,

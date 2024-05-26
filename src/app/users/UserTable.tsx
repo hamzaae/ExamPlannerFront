@@ -31,7 +31,7 @@ const UserTable = ({users}) => {
     const router = useRouter()
 
     const handleClick = (userId) => {
-      fetch(`http://localhost:4001/users/` + userId, {
+      fetch(`http://localhost:8080/api/personnel/` + userId, {
         method: "DELETE",
       }).then(() => {
         router.push("/users");
@@ -44,7 +44,7 @@ const UserTable = ({users}) => {
     return(
         <TableBody>
         {users.map((user) => (
-                <TableRow key={user.id}>
+                <TableRow key={user.idPerson}>
                 <TableCell className="font-medium">
                   {user.firstName + " " + user.lastName}
                 </TableCell>
@@ -75,7 +75,7 @@ const UserTable = ({users}) => {
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
                       <UserUpdate user={user}/>
-                      <DropdownMenuItem onClick={() => handleClick(user.id)}>Delete</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleClick(user.idPerson)}>Delete</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>

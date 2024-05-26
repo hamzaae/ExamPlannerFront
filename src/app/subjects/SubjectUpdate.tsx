@@ -25,17 +25,21 @@ import { DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
 import { ComboList } from "./ComboList"
 
-export function SubjectUpdate({ subject }) {
+export function SubjectUpdate({ subject, users, prof, coord }) {
 
   const router = useRouter()
 
   const [title, setTitle] = useState(subject.title || "");
   const [type, setType] = useState(subject.type || "");
   const [level, setLevel] = useState(subject.level || "");
-  const [professor, setProfessor] = useState(subject.professor || "");
-  const [coordinator, setCoordinator] = useState(subject.coordinator || "");
+  const [professor, setProfessor] = useState(prof || null);
+  const [coordinator, setCoordinator] = useState(coord || null);
   const [loading, setLoading] = useState(false);
 
+  const getUserName = (userId) => {
+    const user = users.find(user => user.id === userId);
+    return user ? `${user.firstName} ${user.lastName}` : '';
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -49,8 +53,8 @@ export function SubjectUpdate({ subject }) {
             "title": title,
             "type": type,
             "level": level,
-            "professor": professor,
-            "coordinator": coordinator
+            "professor": professor?.id || null,
+            "coordinator": coordinator?.id || null
         }),
     })
     if (response.ok) {
@@ -119,32 +123,19 @@ export function SubjectUpdate({ subject }) {
               <div className="grid grid-cols-2 gap-4">
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Professor</Label>
-                      {/* <Select name="professor" value={professor}
-                        onValueChange={(value) => setProfessor(value)}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="system">Prof 1</SelectItem>
-                          <SelectItem value="user">Prof 2</SelectItem>
-                        </SelectContent>
-                      </Select> */}
-                      {/* <ComboSelect /> */}
-                      <ComboList />
+                      <ComboList
+                        users={users}
+                        setSelectedStatus={setProfessor}
+                        selectedStatus={professor}
+                      />
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Coordinator</Label>
-                      {/* <Select name="coordinator" value={coordinator}
-                        onValueChange={(value) => setCoordinator(value)}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a level" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="system">coord 1</SelectItem>
-                          <SelectItem value="user">coord 2</SelectItem>
-                        </SelectContent>
-                      </Select> */}
-                      <ComboList />
+                      <ComboList
+                        users={users}
+                        setSelectedStatus={setCoordinator}
+                        selectedStatus={coordinator}
+                      />
                     </div>
               </div>
 

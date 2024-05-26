@@ -58,8 +58,8 @@ const HeaderBar = () => {
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>My Account</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>Settings</DropdownMenuItem>
-                        <DropdownMenuItem>About</DropdownMenuItem>
+                        <a href="/settings"><DropdownMenuItem>Settings</DropdownMenuItem></a>
+                        <a href="/about"><DropdownMenuItem>About</DropdownMenuItem></a>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>Logout</DropdownMenuItem>
                     </DropdownMenuContent>

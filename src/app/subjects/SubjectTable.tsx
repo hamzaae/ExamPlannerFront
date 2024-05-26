@@ -26,7 +26,7 @@ import {
   import { useRouter } from "next/navigation"
 import { SubjectUpdate } from "./SubjectUpdate"
 
-const SubjectTable = ({subjects}) => {
+const SubjectTable = ({subjects, users}) => {
 
     const router = useRouter()
 
@@ -37,6 +37,11 @@ const SubjectTable = ({subjects}) => {
         router.push("/subjects");
         window.location.reload();
       });
+    };
+
+    const getProfessorName = (professorId) => {
+      const professor = users.find(user => user.id === professorId);
+      return professor ? `${professor.firstName} ${professor.lastName}` : '';
     };
 
 
@@ -56,10 +61,10 @@ const SubjectTable = ({subjects}) => {
               {subject.level}
             </TableCell>
             <TableCell className="hidden md:table-cell">
-              {subject.professor}
+            {getProfessorName(subject.professor)}
             </TableCell>
             <TableCell className="hidden md:table-cell">
-              {subject.coordinator}
+            {getProfessorName(subject.coordinator)}
             </TableCell>
             <TableCell>
               <DropdownMenu>
@@ -75,7 +80,7 @@ const SubjectTable = ({subjects}) => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                  <SubjectUpdate subject={subject}/>
+                  {users && <SubjectUpdate subject={subject} users={users} prof={subject.professor} coord={subject.coordinator}/>}
                   <DropdownMenuItem onClick={() => handleClick(subject.id)}>Delete</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

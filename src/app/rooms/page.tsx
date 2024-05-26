@@ -45,7 +45,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 export default function Rooms() {
 
-  const { error, isPending, data: rooms } = useFetch('http://localhost:4001/rooms')
+  const { error, isPending, data: rooms } = useFetch('http://localhost:8080/api/Room')
 
 
     return (

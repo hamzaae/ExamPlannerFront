@@ -51,8 +51,8 @@ import { Skeleton } from "@/components/ui/skeleton"
   
   
   export default function Subjects() {
-    const { error, isPending, data: subjects } = useFetch('http://localhost:4001/subjects')
-    const { data: users } = useFetch('http://localhost:4002/users')
+    const { error, isPending, data: subjects } = useFetch('http://localhost:8080/api/Educationalelement')
+    const { data: users } = useFetch('http://localhost:8080/api/personnel')
     
     
       return (
@@ -92,7 +92,7 @@ import { Skeleton } from "@/components/ui/skeleton"
                   <Departements />
                   {users && <SubjectForm users={users} />}
                 </div>
-                {subjects && <Card x-chunk="dashboard-06-chunk-0">
+                {subjects && users && <Card x-chunk="dashboard-06-chunk-0">
                   <CardHeader>
                     <CardTitle>Subjects</CardTitle>
                     <CardDescription>
@@ -125,7 +125,7 @@ import { Skeleton } from "@/components/ui/skeleton"
                           </TableHead>
                         </TableRow>
                       </TableHeader>
-                       <SubjectTable subjects={subjects} />
+                       <SubjectTable subjects={subjects} users={users}/>
                     </Table>
                   </CardContent>
                   <CardFooter>
