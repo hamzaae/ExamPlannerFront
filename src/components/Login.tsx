@@ -1,10 +1,54 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-const Login = () => {
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+
+const Login = ({ onLoginSuccess }: { onLoginSuccess: () => void }) => {
+
+  const router = useRouter()
+
+  const [state, setState] = useState({
+    username: "",
+    password: ""
+  })
+
+  function handleChange(e) {
+    const copy = { ...state }
+    copy[e.target.name] = e.target.value
+    setState(copy)
+  }
+
+  async function handleSubmit() {
+    const username = state.username; 
+    const password = state.password; 
+  
+    const res = await fetch("http://localhost:8080/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Basic " + btoa(username + ":" + password)
+      }
+    });
+  
+    if (res.ok) {
+      const token = await res.text(); 
+      localStorage.setItem("token", token);
+      onLoginSuccess();
+      router.push("/");
+      window.location.reload();
+    } else {
+      alert("Bad credentials");
+    }
+  }
+  
+
+
     return (
 
       <div className="flex items-center justify-center py-20">
@@ -23,21 +67,31 @@ const Login = () => {
                 type="email"
                 placeholder="m@example.com"
                 required
+                name="username" 
+                value={state.username} 
+                onChange={handleChange}
               />
             </div>
             <div className="grid gap-2">
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
-                <Link
+                {/* <Link
                   href="/forgot-password"
                   className="ml-auto inline-block text-sm underline"
                 >
                   Forgot your password?
-                </Link>
+                </Link> */}
               </div>
-              <Input id="password" type="password" required />
+              <Input 
+              id="password" 
+              type="password" 
+              name="password" 
+              value={state.password} 
+              onChange={handleChange}
+              required 
+              />
             </div>
-            <Button type="submit" className="w-full">
+            <Button onClick={handleSubmit} className="w-full">
               Login
             </Button>
           </div>

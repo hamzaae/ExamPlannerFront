@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
 import {
@@ -86,16 +88,25 @@ import { PopOver } from "./PopOver"
 import ExamForm from "./ExamForm"
 import { DatePicker } from "./DatePicker"
 import { Checkbox } from "@/components/ui/checkbox"
+import { useState } from "react"
+import { format } from "date-fns"
   
 
 
 export default function Exams() {
+  const [date, setDate] = useState()
     return (
         <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
 
-            <div className="flex items-center">
-              <DatePicker />
-            </div>
+            <form className="flex items-center gap-4">
+              <DatePicker date={date} setDate={setDate}/>
+              <Button >Search Date</Button> 
+              {date ? (
+          <h1>{format(date, 'yyyy-MM-dd')}</h1> // Or any desired format
+        ) : (
+          <h1>No date selected</h1>
+        )}
+            </form>
 
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>

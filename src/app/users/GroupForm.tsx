@@ -39,7 +39,7 @@ export function GroupForm({users}) {
     const handleSubmit = async (e) => {
       e.preventDefault()
       setLoading(true);
-      const response = await fetch("http://localhost:4002/groups/", {
+      const response = await fetch("http://localhost:8080/api/group", {
           method: "POST",
           headers: {
               "Content-Type": "application/json",

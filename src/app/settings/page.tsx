@@ -76,11 +76,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import AuthenticatedLayout from "@/components/AuthenticatedLayout"
 
 export default function Settings() {
 
 return(
-
+  <AuthenticatedLayout>
             <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-">
 
                   <form className="grid w-full max-w-screen-md gap-6">
@@ -165,9 +166,8 @@ return(
                       </div>
                     </fieldset>
                   </form>
-
-
             </div>
+    </AuthenticatedLayout>
 
 
         )

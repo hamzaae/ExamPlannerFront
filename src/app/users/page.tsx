@@ -41,6 +41,7 @@ import { UserForm } from "./UserForm"
 import { GroupForm } from "./GroupForm"
 import useFetch from "../useFetch"
 import UserTable from "./UserTable"
+import AuthenticatedLayout from "@/components/AuthenticatedLayout"
 
 
 export default function Users() {
@@ -49,7 +50,7 @@ export default function Users() {
 
 
     return (
-      
+      <AuthenticatedLayout>
         <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
             <div className="flex items-center">
               <div className="ml-auto flex items-center gap-2">
@@ -135,5 +136,6 @@ export default function Users() {
               </div>
             )}
         </div>
+      </AuthenticatedLayout>
     )
   }

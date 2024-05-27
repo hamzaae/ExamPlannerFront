@@ -130,6 +130,24 @@ export default function ExamForm() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                     <div className="grid gap-3">
+                      <Label htmlFor="top-k">Number of Monitors / Room</Label>
+                      <Input type="number" placeholder="Number of Monitors" value={2}/>
+                    </div>
+                    <div className="grid gap-3">
+                      <Label htmlFor="top-k">Coordinator</Label>
+                      <Select defaultValue="">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a level" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="system">coord 1</SelectItem>
+                          <SelectItem value="user">coord 2</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+              </div>
+              {/* <div className="grid grid-cols-2 gap-4">
+                    <div className="grid gap-3">
                       <Label htmlFor="top-k">Professor</Label>
                       <Select defaultValue="">
                         <SelectTrigger>
@@ -153,7 +171,7 @@ export default function ExamForm() {
                         </SelectContent>
                       </Select>
                     </div>
-              </div>
+              </div> */}
             </form>
           </div>
 

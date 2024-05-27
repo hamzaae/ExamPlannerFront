@@ -46,6 +46,7 @@ import { Sub } from "@radix-ui/react-dropdown-menu"
 import SubjectTable from "./SubjectTable"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
+import AuthenticatedLayout from "@/components/AuthenticatedLayout"
   
   
   
@@ -56,6 +57,7 @@ import { Skeleton } from "@/components/ui/skeleton"
     
     
       return (
+        <AuthenticatedLayout>
           <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
               {/* <div className="justify-center items-center">
                 
@@ -148,5 +150,6 @@ import { Skeleton } from "@/components/ui/skeleton"
                   </div>
                 )}
           </div>
+        </AuthenticatedLayout>
       )
     }
