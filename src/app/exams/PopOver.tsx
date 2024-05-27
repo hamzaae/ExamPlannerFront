@@ -12,7 +12,8 @@ export function PopOver() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Badge>Full</Badge>
+        {/* <Badge>Full</Badge> */}
+        <Button>Details</Button>
       </PopoverTrigger>
       <PopoverContent className="w-180">
         <div className="grid gap-4">

@@ -69,7 +69,7 @@ export default function MainHome() {
     const username = state.username; 
     const password = state.password; 
   
-    const res = await fetch("http://localhost:8080/token", {
+    const res = await fetch("http://localhost:8080/api/auth/token", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -80,7 +80,7 @@ export default function MainHome() {
     if (res.ok) {
       const token = await res.text(); 
       localStorage.setItem("token", token);
-      router.push("http://localhost:3000/home");
+      router.push("/home");
       // window.location.reload();
     } else {
       alert("Bad credentials");

@@ -90,12 +90,14 @@ import { DatePicker } from "./DatePicker"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useState } from "react"
 import { format } from "date-fns"
+import LayoutAuthenticated from "@/components/AuthenticatedLayout"
   
 
 
 export default function Exams() {
   const [date, setDate] = useState()
     return (
+      <LayoutAuthenticated>
         <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
 
             <form className="flex items-center gap-4">
@@ -186,5 +188,6 @@ export default function Exams() {
               </Card>
 
         </div>
+      </LayoutAuthenticated>
     )
   }
