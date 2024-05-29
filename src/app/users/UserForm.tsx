@@ -75,7 +75,7 @@ export function UserForm() {
         <DialogHeader>
         <DialogTitle>Add User</DialogTitle>
         <DialogDescription>
-            Insert user infos here. Click save when you're done.
+            Insert user infos here. Click save when you&apos;re done.
         </DialogDescription>
         </DialogHeader>
 

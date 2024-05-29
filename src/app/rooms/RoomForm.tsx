@@ -69,7 +69,7 @@ export default function RoomForm() {
                     <DialogHeader>
                     <DialogTitle>Add Room</DialogTitle>
                     <DialogDescription>
-                        Insert room infos here. Click save when you're done.
+                        Insert room infos here. Click save when you&apos;re done.
                     </DialogDescription>
                     </DialogHeader>
                     <form onSubmit={handleSubmit}>

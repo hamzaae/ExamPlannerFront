@@ -73,7 +73,7 @@ export function SubjectForm({users}) {
         <DialogHeader>
         <DialogTitle>Add Subject</DialogTitle>
         <DialogDescription>
-            Insert subject infos here. Click save when you're done.
+            Insert subject infos here. Click save when you&apos;re done.
         </DialogDescription>
         </DialogHeader>
 

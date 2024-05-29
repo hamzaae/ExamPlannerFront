@@ -68,7 +68,7 @@ export default function ExamForm() {
         <DialogHeader>
         <DialogTitle>New exam</DialogTitle>
         <DialogDescription>
-            Insert exam infos here. Click save when you're done.
+            Insert exam infos here. Click save when you&apos;re done.
         </DialogDescription>
         </DialogHeader>
 

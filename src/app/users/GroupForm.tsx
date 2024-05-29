@@ -73,7 +73,7 @@ export function GroupForm({users}) {
         <SheetHeader>
         <SheetTitle>New Group</SheetTitle>
         <SheetDescription>
-            Create new group here. Click save when you're done.
+            Create new group here. Click save when you&apos;re done.
         </SheetDescription>
         </SheetHeader>
         <form onSubmit={handleSubmit} className="grid gap-4 py-4">
