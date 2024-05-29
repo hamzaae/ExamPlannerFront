@@ -13,9 +13,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-export function DatePicker({ date, setDate }) {
+export function DatePicker({ date, setDate }: { date: Date, setDate: (date: Date) => void }) {
 
-  const handleDateChange = (selectedDate) => {
+  const handleDateChange = (selectedDate: Date) => {
     // Handle date selection here
     setDate(selectedDate);
 
