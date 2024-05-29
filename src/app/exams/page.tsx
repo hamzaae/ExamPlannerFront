@@ -91,6 +91,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { useState } from "react"
 import { format } from "date-fns"
 import LayoutAuthenticated from "@/components/AuthenticatedLayout"
+import ExamTable from "./ExamTable"
   
 
 
@@ -103,12 +104,38 @@ export default function Exams() {
             <form className="flex items-center gap-4">
               <DatePicker date={date} setDate={setDate}/>
               <Button >Search Date</Button> 
-              {date ? (
-          <h1>{format(date, 'yyyy-MM-dd')}</h1> // Or any desired format
-        ) : (
-          <h1>No date selected</h1>
-        )}
             </form>
+
+            <div className="ml-auto flex items-center gap-2">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="h-8 gap-1">
+                      <ListFilter className="h-3.5 w-3.5" />
+                      <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                        Filter
+                      </span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Filter by type</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuCheckboxItem checked>
+                      Amphie
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem>Room</DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem>
+                      Tp
+                    </DropdownMenuCheckboxItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <Button size="sm" variant="outline" className="h-8 gap-1">
+                  <File className="h-3.5 w-3.5" />
+                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                    Export
+                  </span>
+                </Button>
+                <ExamForm />
+              </div>
 
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
@@ -118,73 +145,8 @@ export default function Exams() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Room</TableHead>
-                        <TableHead>8-10</TableHead>
-                        <TableHead>10-12</TableHead>
-                        <TableHead>14-16</TableHead>
-                        <TableHead>16-18</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell className="font-medium">
-                          Room 11
-                        </TableCell>
-                        <TableCell>
-                          {/* <ExamForm /> */}
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          <PopOver />
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          <Checkbox />
-                        </TableCell>
-                        <TableCell>
-                          <PopOver />
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell className="font-medium">
-                          Amphie A
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">Amphie</Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          Amphie
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          <Checkbox />
-                        </TableCell>
-                        <TableCell>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                aria-haspopup="true"
-                                size="icon"
-                                variant="ghost"
-                              >
-                                <MoreHorizontal className="h-4 w-4" />
-                                <span className="sr-only">Toggle menu</span>
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                              <DropdownMenuItem>Edit</DropdownMenuItem>
-                              <DropdownMenuItem>Delete</DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
+                  <ExamTable />
                 </CardContent>
-                <CardFooter>
-                  <ExamForm />
-                </CardFooter>
               </Card>
 
         </div>
