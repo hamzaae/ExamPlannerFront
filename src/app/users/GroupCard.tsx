@@ -124,7 +124,7 @@ export function GroupCard({ users, onSelectedMembersChange }) {
                                         className="inline-block border-2 border-background"
                                     >
                                         {/* <AvatarImage src={user.avatar} /> */}
-                                        <AvatarFallback>{user.lastName[0]}</AvatarFallback>
+                                        <AvatarFallback>{user.lastName[0] + user.firstName[0]}</AvatarFallback>
                                     </Avatar>
                                 ))}
                             </div>
@@ -136,12 +136,12 @@ export function GroupCard({ users, onSelectedMembersChange }) {
                         <Button
                             disabled={selectedUsers.length < 1}
                             onClick={() => {
-                                const selectedMemberIds = selectedUsers.map(user => user.id);
+                                const selectedMemberIds = selectedUsers.map(person => person.idPerson);
                                 onSelectedMembersChange(selectedMemberIds);
                                 setOpen(false);
                             }}
                         >
-                            Continue
+                            Continue 
                         </Button>
                     </DialogFooter>
                 </DialogContent>

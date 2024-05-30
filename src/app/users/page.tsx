@@ -47,6 +47,8 @@ import AuthenticatedLayout from "@/components/AuthenticatedLayout"
 export default function Users() {
 
     const { error, isPending, data: users } = useFetch('http://localhost:8080/api/personnel')
+    const { errorSec, isPendingSec, data: sectors } = useFetch('http://localhost:8080/api/utils/sectors')
+
 
 
     return (
@@ -80,7 +82,7 @@ export default function Users() {
                     Export
                   </span>
                 </Button>
-                <UserForm />
+                {sectors && <UserForm sectors={sectors}/>}
                 <GroupForm users={users} />
 
               </div>

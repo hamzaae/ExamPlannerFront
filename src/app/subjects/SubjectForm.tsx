@@ -27,33 +27,49 @@ import { useState } from "react"
 import { ComboList } from "./ComboList"
 
 
-export function SubjectForm({users}) {
+export function SubjectForm({users, levels}) {
 
   const router = useRouter()
 
   const [title, setTitle] = useState('');
   const [type, setType] = useState('');
-  const [level, setLevel] = useState('');
-  const [professor, setProfessor] = useState(null);
-  const [coordinator, setCoordinator] = useState(null);
+  const [level, setLevel] = useState();
+  const [professor, setProfessor] = useState("");
+  const [coordinator, setCoordinator] = useState("");
   const [loading, setLoading] = useState(false);
 
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true);
-    const response = await fetch("http://localhost:4001/subjects", {
+    const response = await fetch("http://localhost:8080/api/Educationalelement", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
+            "Authorization": "Bearer " + localStorage.getItem("token")
         },
-        body: JSON.stringify({
+        body: JSON.stringify(
+        //   {
+        //   "title": title,
+        //   "type": type,
+        //   "level": 1,
+        //   "professor": professor,
+        //   "coordinator": coordinator
+        // }
+        {
           "title": title,
-          "type": type,
-          "level": level,
-          "professor": professor?.id || null,
-          "coordinator": coordinator?.id || null
-        }),
+          "level": {
+            "idLevel": level
+          },
+          "professor": {
+            "idPerson": professor
+          },
+          "coordinator": {
+            "idPerson": coordinator
+          },
+          "elementType": type
+        }
+      ),
     })
     if (response.ok) {
       router.push("/subjects");
@@ -95,8 +111,8 @@ export function SubjectForm({users}) {
                           <SelectValue placeholder="Select a type" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="system">Subject</SelectItem>
-                          <SelectItem value="user">Sub Subject</SelectItem>
+                          <SelectItem value="ELEMENT">Element</SelectItem>
+                          <SelectItem value="MODULE">Module</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -105,11 +121,16 @@ export function SubjectForm({users}) {
                       <Select name="level" value={level}
                         onValueChange={(value) => setLevel(value)}>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a level" />
+                          <SelectValue placeholder="Select a level">
+                          {levels &&
+                            levels.find((lvl) => lvl.idLevel == level)?.title ||
+                            "Select a level"}
+                          </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="system">AP 1</SelectItem>
-                          <SelectItem value="user">AP 2</SelectItem>
+                          {levels && levels.map((level) => (
+                          <SelectItem value={level.idLevel}>{level.title}</SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </div>
@@ -117,31 +138,10 @@ export function SubjectForm({users}) {
               <div className="grid grid-cols-2 gap-4">
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Professor</Label>
-                      {/* <Select name="professor" value={professor}
-                        onValueChange={(value) => setProfessor(value)}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="system">Prof 1</SelectItem>
-                          <SelectItem value="user">Prof 2</SelectItem>
-                        </SelectContent>
-                      </Select> */}
-                      {/* <ComboSelect /> */}
                       {users && <ComboList users={users} setSelectedStatus={setProfessor} selectedStatus={professor}/>}
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Coordinator</Label>
-                      {/* <Select name="coordinator" value={coordinator}
-                        onValueChange={(value) => setCoordinator(value)}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a level" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="system">coord 1</SelectItem>
-                          <SelectItem value="user">coord 2</SelectItem>
-                        </SelectContent>
-                      </Select> */}
                       {users && <ComboList users={users} setSelectedStatus={setCoordinator} selectedStatus={coordinator}/>}
                     </div>
               </div>

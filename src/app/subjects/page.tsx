@@ -54,6 +54,7 @@ import AuthenticatedLayout from "@/components/AuthenticatedLayout"
   export default function Subjects() {
     const { error, isPending, data: subjects } = useFetch('http://localhost:8080/api/Educationalelement')
     const { data: users } = useFetch('http://localhost:8080/api/personnel')
+    const { data: levels } = useFetch('http://localhost:8080/api/utils/levels')
     
     
       return (
@@ -92,9 +93,9 @@ import AuthenticatedLayout from "@/components/AuthenticatedLayout"
                     </span>
                   </Button>
                   <Departements />
-                  {users && <SubjectForm users={users} />}
+                  {users && levels && <SubjectForm users={users} levels={levels} />}
                 </div>
-                {subjects && users && <Card x-chunk="dashboard-06-chunk-0">
+                {subjects && users && levels && <Card x-chunk="dashboard-06-chunk-0">
                   <CardHeader>
                     <CardTitle>Subjects</CardTitle>
                     <CardDescription>
@@ -127,7 +128,7 @@ import AuthenticatedLayout from "@/components/AuthenticatedLayout"
                           </TableHead>
                         </TableRow>
                       </TableHeader>
-                       <SubjectTable subjects={subjects} users={users}/>
+                       <SubjectTable subjects={subjects} users={users} levels={levels}/>
                     </Table>
                   </CardContent>
                   <CardFooter>

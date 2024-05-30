@@ -47,7 +47,7 @@ const RoomTable = ({rooms}) => {
         {rooms.map((room) => (
             <TableRow key={room.id}>
             <TableCell className="font-medium">
-              {room.name}
+              {room.nameRoom}
             </TableCell>
             <TableCell>
               <Badge variant="outline">{room.type}</Badge>

@@ -9,15 +9,21 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export function PopOver() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        {/* <Badge>Full</Badge> */}
-        {/* <Button>Details</Button> */}
         <Avatar>
-          {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
           <AvatarFallback>AB</AvatarFallback>
         </Avatar>
       </PopoverTrigger>
@@ -30,42 +36,39 @@ export function PopOver() {
             </p>
           </div>
           <form className="grid w-full items-start gap-6">
-              <div className="grid grid-cols-4 gap-4">
+              <div className="grid grid-cols-6 gap-4">
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Subject</Label>
-                      <Select defaultValue="">
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="system">Subject</SelectItem>
-                          <SelectItem value="user">Sub Subject</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Input type="text" placeholder="Subject" value="Maths" disabled/>
                     </div>
                     <div className="grid gap-3">
-                      <Label htmlFor="top-k">Session</Label>
-                      <Select defaultValue="">
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a level" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="system">Normal</SelectItem>
-                          <SelectItem value="user">Ratt</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Label htmlFor="top-k">Professor</Label>
+                      <Input type="text" placeholder="Professor" value="Prof. Tarik" disabled/>
                     </div>
                     <div className="grid gap-3">
-                      <Label htmlFor="top-k">Semester</Label>
-                      <Select defaultValue="">
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a level" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="system">Print</SelectItem>
-                          <SelectItem value="user">Autom</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Label htmlFor="top-k">Coordinator</Label>
+                      <Input type="text" placeholder="Coordinator" value="Coord 1" disabled/>
+                    </div>
+                    <div className="grid gap-3">
+                      <Label htmlFor="top-k">Monitors</Label>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline">Open</Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-56">
+                          <DropdownMenuLabel>Panel Position</DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuRadioGroup >
+                            <DropdownMenuRadioItem disabled value="">Prof 1</DropdownMenuRadioItem>
+                            <DropdownMenuRadioItem disabled value="">Prof 2</DropdownMenuRadioItem>
+                            <DropdownMenuRadioItem disabled value="">Prof 3</DropdownMenuRadioItem>
+                          </DropdownMenuRadioGroup>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                    <div className="grid gap-3">
+                      <Label htmlFor="top-k">Coordinator</Label>
+                      <Input type="text" placeholder="Coordinator" value="Coord 1" disabled/>
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Type</Label>

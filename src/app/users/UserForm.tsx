@@ -22,8 +22,9 @@ import {
 
 import { useState } from "react"
 import { redirect, useRouter } from "next/navigation"
+import useFetch from "../useFetch"
 
-export function UserForm() {
+export function UserForm({ sectors}) {
 
   const router = useRouter()
 
@@ -34,6 +35,7 @@ export function UserForm() {
   const [email, setEmail] = useState('');
   const [grade, setGrade] = useState('');
   const [speciality, setSpeciality] = useState('');
+  const [selectedSector, setSelectedSector] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleRoleChange = (value) => {
@@ -46,7 +48,8 @@ export function UserForm() {
     const response = await fetch("http://localhost:8080/api/personnel", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + localStorage.getItem("token")
         },
         body: JSON.stringify({
           "type": selectedRole,
@@ -55,7 +58,9 @@ export function UserForm() {
           "cin": cin,
           "email": email,
           "grade": grade,
-          "speciality": speciality
+          "speciality": speciality,
+          "idSector": sectors.find(sector => sector.title === selectedSector).idSector,
+          "idDepartement": 1 // hardcoded for now
         }),
     })
     if (response.ok) {
@@ -130,6 +135,7 @@ export function UserForm() {
               <legend className="-ml-1 px-1 text-sm font-medium">
                 Professor
               </legend>
+              <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-3">
                 <Label htmlFor="role">Speciality</Label>
                 <Select name="speciality" value={speciality}
@@ -144,6 +150,22 @@ export function UserForm() {
                     <SelectItem value="energies">Energies</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+              <div className="grid gap-3">
+                <Label htmlFor="role">Sector</Label>
+                <Select name="sector" value={selectedSector} onValueChange={(value) => setSelectedSector(value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a sector">{selectedSector}</SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    {sectors.map((sector) => (
+                      <SelectItem key={sector.idSector} value={sector.title}>
+                        {sector.title}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               </div>
             </fieldset>
             <fieldset className={`Administrator grid gap-6 rounded-lg border p-4 ${selectedRole === 'Administrator' ? '' : 'hidden'}`}>

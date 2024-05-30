@@ -39,13 +39,14 @@ export default function RoomForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const response = await fetch("http://localhost:4001/rooms", {
+        const response = await fetch("http://localhost:8080/api/Room", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
             },
             body: JSON.stringify({
-                "name": roomName,
+                "nameRoom": roomName,
                 "type" : roomType,
                 "place" : roomPlace,
                 "size" : roomSize,
@@ -131,7 +132,7 @@ export default function RoomForm() {
                         </div>
                     </div>
                     <DialogFooter>
-                    <Button type="submit">Save changes</Button>
+                    <Button type="submit">Save Room</Button>
                     </DialogFooter>
                     </form>
                 </DialogContent>

@@ -37,26 +37,56 @@ export function GroupForm({users}) {
   
   
     const handleSubmit = async (e) => {
-      e.preventDefault()
+      e.preventDefault();
       setLoading(true);
-      const response = await fetch("http://localhost:8080/api/group", {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            "name": name,
-            "description": description,
-            "members": members,
-            "createDate": new Date().toLocaleString()
-          }),
-      })
-      if (response.ok) {
-        router.push("/users");
-        window.location.reload();
+    
+      // 1. Create the group
+      const groupResponse = await fetch("http://localhost:8080/api/Group", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          title: name,
+          description: description,
+          createDate: new Date().toLocaleString(),
+        }),
+      });
+    
+      if (!groupResponse.ok) {
+        // Handle errors creating the group
+        console.error("Error creating group:", await groupResponse.text());
+        setLoading(false);
+        return;
       }
-  
-  }
+    
+      // 2. Extract the created group ID from the response
+      const groupData = await groupResponse.json();
+      console.log(members);
+      console.log(typeof members);
+    
+      // 3. Add members to the group
+      const addMembersResponse = await fetch(`http://localhost:8080/api/Group/${groupData}/addProfessortogroup`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        body: JSON.stringify(Array.from(new Set(members.map(member => parseInt(member, 10))))),
+      });
+    
+      if (!addMembersResponse.ok) {
+        // Handle errors adding members
+        console.error("Error adding members:", await addMembersResponse.text());
+      }
+    
+      setLoading(false);
+    
+      router.push("/users");
+      window.location.reload();
+    };
+    
 
   const handleSelectedMembers = (selectedMembers) => {
     setMembers(selectedMembers);

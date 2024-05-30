@@ -26,13 +26,17 @@ import {
   import { useRouter } from "next/navigation"
 import { SubjectUpdate } from "./SubjectUpdate"
 
-const SubjectTable = ({subjects, users}) => {
+const SubjectTable = ({subjects, users, levels}) => {
 
     const router = useRouter()
 
     const handleClick = (subjectId) => {
-      fetch(`http://localhost:4001/subjects/` + subjectId, {
+      console.log(subjectId);
+      fetch(`http://localhost:8080/api/Educationalelement/` + subjectId, {
         method: "DELETE",
+        headers: {
+          "Authorization": "Bearer " + localStorage.getItem("token")
+      }
       }).then(() => {
         router.push("/subjects");
         window.location.reload();
@@ -40,8 +44,13 @@ const SubjectTable = ({subjects, users}) => {
     };
 
     const getProfessorName = (professorId) => {
-      const professor = users.find(user => user.id === professorId);
+      const professor = users.find(user => user.idPerson === professorId);
       return professor ? `${professor.firstName} ${professor.lastName}` : '';
+    };
+
+    const getLevelName = (levelId) => {
+      const level = levels.find(lvl => lvl.idLevel == levelId);
+      return level ? `${level.title}` : '';
     };
 
 
@@ -50,21 +59,21 @@ const SubjectTable = ({subjects, users}) => {
         <TableBody>
   
         {subjects.map((subject) => (
-            <TableRow key={subject.id}>
+            <TableRow key={subject.idElement}>
             <TableCell className="font-medium">
               {subject.title}
             </TableCell>
             <TableCell>
-              <Badge variant="outline">{subject.type}</Badge>
+              <Badge variant="outline">{subject.elementType}</Badge>
             </TableCell>
             <TableCell className="hidden md:table-cell">
-              {subject.level}
+              {getLevelName(subject.level.idLevel)}
             </TableCell>
             <TableCell className="hidden md:table-cell">
-            {getProfessorName(subject.professor)}
+            {getProfessorName(subject.professor.idPerson)}
             </TableCell>
             <TableCell className="hidden md:table-cell">
-            {getProfessorName(subject.coordinator)}
+            {getProfessorName(subject.coordinator.idPerson)}
             </TableCell>
             <TableCell>
               <DropdownMenu>
@@ -81,7 +90,7 @@ const SubjectTable = ({subjects, users}) => {
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
                   {users && <SubjectUpdate subject={subject} users={users} prof={subject.professor} coord={subject.coordinator}/>}
-                  <DropdownMenuItem onClick={() => handleClick(subject.id)}>Delete</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleClick(subject.idElement)}>Delete</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </TableCell>
