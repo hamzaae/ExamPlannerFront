@@ -59,9 +59,9 @@ export default function ExamForm({subjects, room, startTime, date}) {
                 "Authorization": "Bearer " + localStorage.getItem("token")
             },
             body: JSON.stringify({
-                "startTime": startTime,
-                "endTime" : startTime + 2,
-                "preuve" : preuve,
+                "startTime": startTime.toString(),
+                "endTime" : (startTime + 2).toString(),
+                "preuve" : "preuve",
                 "element" : {"idElement": subject},
             }),
         })
@@ -79,7 +79,7 @@ export default function ExamForm({subjects, room, startTime, date}) {
                 "dateExam": date, 
                 "administrator" : {"idPerson": 1},
                 // "coordinator" : {"idPerson": 1},
-                "room" : {"idRoom": 1},
+                "room" : {"idRoom": room.idRoom},
                 "exam" : {"idExam": examData},
             }),
         })

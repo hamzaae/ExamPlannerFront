@@ -160,7 +160,7 @@ export default function Users() {
             </CardFooter>
             </Card> }
             {error && <div>{error}</div>}
-            {isPending && isPendingGr && (
+            {(isPending || isPendingGr) && (
               <div className="fixed inset-0 flex items-center justify-center bg-gray-200 ">
                 <div className="flex flex-col items-center space-y-3">
                   <Skeleton className="h-[325px] w-[750px] rounded-xl" />

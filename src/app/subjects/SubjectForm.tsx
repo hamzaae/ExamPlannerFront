@@ -69,7 +69,7 @@ export function SubjectForm({users, levels}) {
       router.push("/subjects");
       window.location.reload();
     }    else {
-      setLoading(false)
+      setLoading(false);
       const errorData = await response.json();
       const errorMessage = errorData.message || "An error occurred";
       toast({

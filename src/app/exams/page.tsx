@@ -93,6 +93,7 @@ import { format } from "date-fns"
 import LayoutAuthenticated from "@/components/AuthenticatedLayout"
 import ExamTable from "./ExamTable"
 import useFetch from "../useFetch"
+import { Skeleton } from "@/components/ui/skeleton"
 
   
 
@@ -114,8 +115,9 @@ export default function Exams() {
   // setDate(getTodayDate());
 
   const { error, isPending, data: rooms } = useFetch('http://localhost:8080/api/Room')
-  const { errorm, isPendingm, data: monitorings } = useFetch('http://localhost:8080/api/monitorings/'+ date)
   const { errors, isPendings, data: subjects } = useFetch('http://localhost:8080/api/Educationalelement')
+  const { errorm, isPendingm, data: monitorings } = useFetch('http://localhost:8080/api/monitorings/date/' + date)
+
 
 
     return (
@@ -125,6 +127,7 @@ export default function Exams() {
             <form className="flex items-center gap-4">
               <DatePicker date={date} setDate={setDate}/>
               <Button >Search Date</Button> 
+              {date}
             </form>
 
             <div className="ml-auto flex items-center gap-2">
@@ -156,7 +159,7 @@ export default function Exams() {
                   </span>
                 </Button>
               </div>
-
+              {subjects && date && monitorings && rooms &&
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
                   <CardTitle>Exams</CardTitle>
@@ -165,10 +168,20 @@ export default function Exams() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  {subjects && date && monitorings && rooms && <ExamTable rooms={rooms} monitorings={monitorings} subjects={subjects} date={date}/>}
+                   <ExamTable rooms={rooms} monitorings={monitorings} subjects={subjects} date={date}/>
                 </CardContent>
-              </Card>
-
+              </Card>}
+              {(isPending || isPendings || isPendingm) && (
+              <div className="fixed inset-0 flex items-center justify-center bg-gray-200 ">
+                <div className="flex flex-col items-center space-y-3">
+                  <Skeleton className="h-[325px] w-[750px] rounded-xl" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-[750px]" />
+                    <Skeleton className="h-4 w-[700px]" />
+                  </div>
+                </div>
+              </div>
+            )}
         </div>
       </LayoutAuthenticated>
     )
