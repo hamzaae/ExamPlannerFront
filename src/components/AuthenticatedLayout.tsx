@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { TooltipProvider } from "@/components/ui/tooltip";
 import SideBar from "@/components/SideBar";
 import HeaderBar from "@/components/HeaderBar";
+import { Toaster } from './ui/toaster';
 
 export default function LayoutAuthenticated(props) {
     const [profile, setProfile] = useState(null)
@@ -39,6 +40,7 @@ export default function LayoutAuthenticated(props) {
                     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-2 xl:grid-cols-2">
                         {props.children}
                     </main>
+                    <Toaster />
                 </div>
             </div>
         }

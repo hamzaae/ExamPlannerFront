@@ -89,7 +89,7 @@ const SubjectTable = ({subjects, users, levels}) => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                  {users && <SubjectUpdate subject={subject} users={users} prof={subject.professor} coord={subject.coordinator}/>}
+                  {users && <SubjectUpdate subject={subject} users={users} prof={subject.professor} coord={subject.coordinator} levels={levels}/>}
                   <DropdownMenuItem onClick={() => handleClick(subject.idElement)}>Delete</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

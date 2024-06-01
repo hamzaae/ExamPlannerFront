@@ -1,5 +1,6 @@
 
 import { Button } from "@/components/ui/button"
+
 import { Input } from "@/components/ui/input"
 import {
     Dialog,
@@ -19,23 +20,26 @@ import {
     SelectValue,
   } from "@/components/ui/select"
 
-import { use, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { redirect, useRouter } from "next/navigation"
+import useFetch from "../useFetch"
+import { toast } from "@/components/ui/use-toast"
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu"
-import { Badge } from "@/components/ui/badge"
 
-export function UserUpdate({ user }) {
+export function UserUpdate({ sectors, user}) {
 
   const router = useRouter()
 
-  const [selectedRole, setSelectedRole] = useState(user.type || "");
-  const [firstName, setFirstName] = useState(user.firstName || "");
-  const [lastName, setLastName] = useState(user.lastName || "");
-  const [cin, setCin] = useState(user.cin || "");
-  const [email, setEmail] = useState(user.email || "");
-  const [grade, setGrade] = useState(user.grade || "");
-  const [speciality, setSpeciality] = useState(user.speciality || "");
+  const [selectedRole, setSelectedRole] = useState(user.type || '');
+  const [firstName, setFirstName] = useState(user.firstName || '');
+  const [lastName, setLastName] = useState(user.lastName || '');
+  const [cin, setCin] = useState(user.cin || '');
+  const [email, setEmail] = useState(user.email || '');
+  const [grade, setGrade] = useState(user.grade || '');
+  const [speciality, setSpeciality] = useState(user.speciality || '');
+  const [selectedSector, setSelectedSector] = useState(user.idSector || '');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleRoleChange = (value) => {
     setSelectedRole(value);
@@ -44,10 +48,11 @@ export function UserUpdate({ user }) {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true);
-    const response = await fetch("http://localhost:8080/api/personnel/" + user.idPerson, {
+    const response = await fetch("http://localhost:8080/api/personnel/" + user.idPerson , {
         method: "PUT",
         headers: {
-            "Content-Type": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + localStorage.getItem("token")
         },
         body: JSON.stringify({
           "type": selectedRole,
@@ -56,12 +61,23 @@ export function UserUpdate({ user }) {
           "cin": cin,
           "email": email,
           "grade": grade,
-          "speciality": speciality
+          "speciality": speciality,
+          "idSector": sectors.find(sector => sector.title === selectedSector)?.idSector,
+          "idDepartement": 1 // hardcoded for now
         }),
     })
     if (response.ok) {
       router.push("/users");
       window.location.reload();
+    }
+    else {
+      setLoading(false)
+      const errorData = await response.json();
+      const errorMessage = errorData.message || "An error occurred";
+      toast({
+        title: "Uh oh! Something went wrong.",
+        description: errorMessage,
+      });
     }
 
 }
@@ -70,16 +86,14 @@ export function UserUpdate({ user }) {
 
     <Dialog>
     <DialogTrigger asChild>
-        <DropdownMenuItem
-        onSelect={(event) => {
+        <DropdownMenuItem  onSelect={(event) => {
           event.preventDefault();
           event.stopPropagation();
-        }}
-        >Edit</DropdownMenuItem>
+        }}>Update</DropdownMenuItem>
     </DialogTrigger>
     <DialogContent className="sm:max-w-[825]">
         <DialogHeader>
-        <DialogTitle>Update User</DialogTitle>
+        <DialogTitle>Add User</DialogTitle>
         <DialogDescription>
             Insert user infos here. Click save when you&apos;re done.
         </DialogDescription>
@@ -120,7 +134,7 @@ export function UserUpdate({ user }) {
                 </div>
                 <div className="grid gap-3">
                     <Label htmlFor="top-k">Role</Label>
-                    <Select disabled name="role" value={selectedRole} onValueChange={handleRoleChange}>
+                    <Select name="role" value={selectedRole} onValueChange={handleRoleChange}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select a role" />
                     </SelectTrigger>
@@ -136,6 +150,7 @@ export function UserUpdate({ user }) {
               <legend className="-ml-1 px-1 text-sm font-medium">
                 Professor
               </legend>
+              <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-3">
                 <Label htmlFor="role">Speciality</Label>
                 <Select name="speciality" value={speciality}
@@ -150,6 +165,22 @@ export function UserUpdate({ user }) {
                     <SelectItem value="energies">Energies</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+              <div className="grid gap-3">
+                <Label htmlFor="role">Sector</Label>
+                <Select name="sector" value={selectedSector} onValueChange={(value) => setSelectedSector(value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a sector">{selectedSector}</SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    {sectors.map((sector) => (
+                      <SelectItem key={sector.idSector} value={sector.title}>
+                        {sector.title}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               </div>
             </fieldset>
             <fieldset className={`Administrator grid gap-6 rounded-lg border p-4 ${selectedRole === 'Administrator' ? '' : 'hidden'}`}>

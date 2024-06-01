@@ -25,6 +25,7 @@ import {
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { toast } from "@/components/ui/use-toast"
 
 export function GroupForm({users}) {
 
@@ -56,15 +57,20 @@ export function GroupForm({users}) {
     
       if (!groupResponse.ok) {
         // Handle errors creating the group
-        console.error("Error creating group:", await groupResponse.text());
-        setLoading(false);
+          const errorData = await groupResponse.json();
+          const errorMessage = errorData.message || "An error occurred";
+          toast({
+            title: "Uh oh! Something went wrong.",
+            description: errorMessage,
+          })
+          setLoading(false);
         return;
       }
     
       // 2. Extract the created group ID from the response
       const groupData = await groupResponse.json();
-      console.log(members);
-      console.log(typeof members);
+      // console.log(members);
+      // console.log(typeof members);
     
       // 3. Add members to the group
       const addMembersResponse = await fetch(`http://localhost:8080/api/Group/${groupData}/addProfessortogroup`, {
@@ -78,7 +84,13 @@ export function GroupForm({users}) {
     
       if (!addMembersResponse.ok) {
         // Handle errors adding members
-        console.error("Error adding members:", await addMembersResponse.text());
+        const errorData = await addMembersResponse.json();
+        const errorMessage = errorData.message || "An error occurred";
+        toast({
+          title: "Uh oh! Something went wrong.",
+          description: errorMessage,
+        })
+        setLoading(false);
       }
     
       setLoading(false);

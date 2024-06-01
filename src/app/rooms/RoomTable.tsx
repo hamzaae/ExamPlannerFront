@@ -24,15 +24,18 @@ import {
   } from "@/components/ui/table"
 
   import { useRouter } from "next/navigation"
-import { UserUpdate } from "./UserUpdate"
+import RoomUpdate from "./RoomUpdate"
 
 const RoomTable = ({rooms}) => {
 
     const router = useRouter()
 
     const handleClick = (roomId) => {
-      fetch(`http://localhost:4001/rooms/` + roomId, {
+      fetch(`http://localhost:8080/api/Room/` + roomId, {
         method: "DELETE",
+        headers: {
+          "Authorization": "Bearer " + localStorage.getItem("token")
+      },
       }).then(() => {
         router.push("/rooms");
         window.location.reload();
@@ -72,8 +75,8 @@ const RoomTable = ({rooms}) => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                  <DropdownMenuItem>Edit</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleClick(room.id)}>Delete</DropdownMenuItem>
+                  <RoomUpdate room={room} />
+                  <DropdownMenuItem onClick={() => handleClick(room.idRoom)}>Delete</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </TableCell>

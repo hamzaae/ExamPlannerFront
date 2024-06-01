@@ -24,25 +24,26 @@ import {
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "@/components/ui/use-toast"
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu"
   
 
 
 
 
-export default function RoomForm() {
+export default function RoomUpdate({room}) {
 
     const router = useRouter()
     
-    const [roomName, setRoomName] = useState('')
-    const [roomType, setRoomType] = useState('')
-    const [roomPlace, setRoomPlace] = useState('')
-    const [roomSize, setRoomSize] = useState(0)
+    const [roomName, setRoomName] = useState(room.nameRoom || '')
+    const [roomType, setRoomType] = useState(room.type || '')
+    const [roomPlace, setRoomPlace] = useState(room.place || '')
+    const [roomSize, setRoomSize] = useState(room.size || 0)
     const [loading, setLoading] = useState(false)
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const response = await fetch("http://localhost:8080/api/Room", {
-            method: "POST",
+        const response = await fetch("http://localhost:8080/api/Room" + roomName.idRoom, {
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": "Bearer " + localStorage.getItem("token")
@@ -74,7 +75,10 @@ export default function RoomForm() {
                 <Dialog>
                     
                 <DialogTrigger asChild>
-                    <Button variant="outline">Add Room</Button>
+                <DropdownMenuItem  onSelect={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                }}>Update</DropdownMenuItem>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>

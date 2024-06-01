@@ -23,6 +23,7 @@ import {
 import { useState } from "react"
 import { redirect, useRouter } from "next/navigation"
 import useFetch from "../useFetch"
+import { toast } from "@/components/ui/use-toast"
 
 export function UserForm({ sectors}) {
 
@@ -37,6 +38,7 @@ export function UserForm({ sectors}) {
   const [speciality, setSpeciality] = useState('');
   const [selectedSector, setSelectedSector] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleRoleChange = (value) => {
     setSelectedRole(value);
@@ -59,13 +61,22 @@ export function UserForm({ sectors}) {
           "email": email,
           "grade": grade,
           "speciality": speciality,
-          "idSector": sectors.find(sector => sector.title === selectedSector).idSector,
+          "idSector": sectors.find(sector => sector.title === selectedSector)?.idSector,
           "idDepartement": 1 // hardcoded for now
         }),
     })
     if (response.ok) {
       router.push("/users");
       window.location.reload();
+    }
+    else {
+      setLoading(false)
+      const errorData = await response.json();
+      const errorMessage = errorData.message || "An error occurred";
+      toast({
+        title: "Uh oh! Something went wrong.",
+        description: errorMessage,
+      });
     }
 
 }

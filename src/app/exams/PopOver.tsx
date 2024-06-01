@@ -19,7 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-export function PopOver() {
+export function PopOver({monitoring}) {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -32,18 +32,14 @@ export function PopOver() {
           <div className="space-y-2">
             <h4 className="font-medium leading-none">Exam Details</h4>
             <p className="text-sm text-muted-foreground">
-              Get the details for the exam.
+              Get the details for the exam.{monitoring.coordinator.idPerson}
             </p>
           </div>
           <form className="grid w-full items-start gap-6">
-              <div className="grid grid-cols-6 gap-4">
+              <div className="grid grid-cols-4 gap-4">
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Subject</Label>
                       <Input type="text" placeholder="Subject" value="Maths" disabled/>
-                    </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="top-k">Professor</Label>
-                      <Input type="text" placeholder="Professor" value="Prof. Tarik" disabled/>
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Coordinator</Label>
@@ -65,10 +61,6 @@ export function PopOver() {
                           </DropdownMenuRadioGroup>
                         </DropdownMenuContent>
                       </DropdownMenu>
-                    </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="top-k">Coordinator</Label>
-                      <Input type="text" placeholder="Coordinator" value="Coord 1" disabled/>
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Type</Label>

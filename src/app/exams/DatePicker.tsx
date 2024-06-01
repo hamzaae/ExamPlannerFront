@@ -20,8 +20,8 @@ export function DatePicker({ date, setDate }) {
     setDate(selectedDate);
 
     // Optionally format the date using date-fns
-    const formattedDate = format(selectedDate, 'yyyy-MM-dd'); // Or any desired format
-    console.log('Selected date (formatted):', formattedDate); // Use formattedDate as needed
+    const formattedDate = format(selectedDate, 'yyyy-MM-dd'); 
+    // console.log('Selected date (formatted):', formattedDate); 
   };
   
   return (

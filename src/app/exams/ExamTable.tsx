@@ -90,11 +90,12 @@ import { DatePicker } from "./DatePicker"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useState } from "react"
 import { format } from "date-fns"
+import useFetch from "../useFetch"
 
 
 
 
-export default function ExamTable() {
+export default function ExamTable({rooms, subjects, date, monitorings}) {
 
     return(        
         <Table>
@@ -108,25 +109,27 @@ export default function ExamTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow>
-            <TableCell className="font-medium">
-              Room 11
-            </TableCell>
-            <TableCell>
-                <Checkbox />        
-            </TableCell>
-            <TableCell className="hidden md:table-cell">
-              <PopOver />
-            </TableCell>
-            <TableCell className="hidden md:table-cell">
-              <Checkbox />
-            </TableCell>
-            <TableCell>
-              <PopOver />
-            </TableCell>
-          </TableRow>
+          {rooms.map((rom) => (
+            <TableRow key={rom.idRoom}>
+              <TableCell className="font-medium" key={0}>
+                {rom.nameRoom}
+              </TableCell>
+              <TableCell key={1}>
+                {monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom && monitoring.exam.startTime == 8) ? <PopOver monitoring={monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom)} /> : <ExamForm subjects={subjects} room={rom} startTime={8} date={date}/>}
+              </TableCell>
+              <TableCell key={2}>
+              {monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom && monitoring.exam.startTime == 10) ? <PopOver monitoring={monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom)} /> : <ExamForm subjects={subjects} room={rom} startTime={10} date={date}/>}
+              </TableCell>
+              <TableCell key={3}>
+              {monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom && monitoring.exam.startTime == 14) ? <PopOver monitoring={monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom)} /> : <ExamForm subjects={subjects} room={rom} startTime={14} date={date}/>}
+              </TableCell>
+              <TableCell key={4}>
+              {monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom && monitoring.exam.startTime == 16) ? <PopOver monitoring={monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom)} /> : <ExamForm subjects={subjects} room={rom} startTime={16} date={date}/>}
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
-        <ExamForm />
+
       </Table>
     )
   }

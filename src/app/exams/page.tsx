@@ -88,15 +88,36 @@ import { PopOver } from "./PopOver"
 import ExamForm from "./ExamForm"
 import { DatePicker } from "./DatePicker"
 import { Checkbox } from "@/components/ui/checkbox"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { format } from "date-fns"
 import LayoutAuthenticated from "@/components/AuthenticatedLayout"
 import ExamTable from "./ExamTable"
+import useFetch from "../useFetch"
+
   
 
 
 export default function Exams() {
-  const [date, setDate] = useState()
+
+  function getTodayDate() {
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0'); 
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); 
+    const yyyy = today.getFullYear();
+  
+    return `${dd}-${mm}-${yyyy}`;
+  }
+
+  const [date, setDate] = useState(getTodayDate);
+
+
+  // setDate(getTodayDate());
+
+  const { error, isPending, data: rooms } = useFetch('http://localhost:8080/api/Room')
+  const { errorm, isPendingm, data: monitorings } = useFetch('http://localhost:8080/api/monitorings/'+ date)
+  const { errors, isPendings, data: subjects } = useFetch('http://localhost:8080/api/Educationalelement')
+
+
     return (
       <LayoutAuthenticated>
         <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
@@ -134,7 +155,6 @@ export default function Exams() {
                     Export
                   </span>
                 </Button>
-                <ExamForm />
               </div>
 
               <Card x-chunk="dashboard-06-chunk-0">
@@ -145,7 +165,7 @@ export default function Exams() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ExamTable />
+                  {subjects && date && monitorings && rooms && <ExamTable rooms={rooms} monitorings={monitorings} subjects={subjects} date={date}/>}
                 </CardContent>
               </Card>
 

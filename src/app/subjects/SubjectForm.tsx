@@ -25,6 +25,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { ComboList } from "./ComboList"
+import { toast } from "@/components/ui/use-toast"
 
 
 export function SubjectForm({users, levels}) {
@@ -49,13 +50,6 @@ export function SubjectForm({users, levels}) {
             "Authorization": "Bearer " + localStorage.getItem("token")
         },
         body: JSON.stringify(
-        //   {
-        //   "title": title,
-        //   "type": type,
-        //   "level": 1,
-        //   "professor": professor,
-        //   "coordinator": coordinator
-        // }
         {
           "title": title,
           "level": {
@@ -74,6 +68,14 @@ export function SubjectForm({users, levels}) {
     if (response.ok) {
       router.push("/subjects");
       window.location.reload();
+    }    else {
+      setLoading(false)
+      const errorData = await response.json();
+      const errorMessage = errorData.message || "An error occurred";
+      toast({
+        title: "Uh oh! Something went wrong.",
+        description: errorMessage,
+      });
     }
 
 }

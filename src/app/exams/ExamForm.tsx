@@ -24,45 +24,100 @@ import {
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Badge } from "@/components/ui/badge"
+import { ComboList } from "../subjects/ComboList"
+import { ComboListE } from "./ComboListE"
+import { toast } from "@/components/ui/use-toast"
+import { set } from "date-fns"
   
 
 
 
 
-export default function ExamForm() {
+export default function ExamForm({subjects, room, startTime, date}) {
 
     const router = useRouter()
     
-    const [roomName, setRoomName] = useState('')
-    const [roomType, setRoomType] = useState('')
-    const [roomPlace, setRoomPlace] = useState('')
-    const [roomSize, setRoomSize] = useState(0)
+    const [subject, setSubject] = useState('')
+    const [session, setSession] = useState('')
+    const [semester, setSemester] = useState('')
+    const [type, setType] = useState('')
+    const [nbr, setNbr] = useState(2)
+    const [preuve, setPreuve] = useState(null)
+    const [loading, setLoading] = useState(false)
+
+    const handleFileChange = (event) => {
+      const file = event.target.files[0];
+      setPreuve(file);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const response = await fetch("http://localhost:4000/rooms", {
+        const examResponse = await fetch("http://localhost:8080/api/Exam", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
             },
             body: JSON.stringify({
-                "name": roomName,
-                "type" : roomType,
-                "place" : roomPlace,
-                "size" : roomSize,
+                "startTime": startTime,
+                "endTime" : startTime + 2,
+                "preuve" : preuve,
+                "element" : {"idElement": subject},
             }),
         })
-        if (response.ok) {
+
+        if (examResponse.ok) {
+            const examData = await examResponse.json();
+
+            const monitorResponse = await fetch("http://localhost:8080/api/monitorings", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            },
+            body: JSON.stringify({
+                "dateExam": date, 
+                "administrator" : {"idPerson": 1},
+                // "coordinator" : {"idPerson": 1},
+                "room" : {"idRoom": 1},
+                "exam" : {"idExam": examData},
+            }),
+        })
+        if (monitorResponse.ok){
             router.push("/rooms")
+            window.location.reload();
         }
+        else {
+          setLoading(false)
+          const errorData = await monitorResponse.json();
+          const errorMessage = errorData.message || "An error occurred";
+          toast({
+            title: "Uh oh! Something went wrong.",
+            description: errorMessage,
+          });
+        }
+        }
+        else {
+          setLoading(false)
+          const errorData = await examResponse.json();
+          const errorMessage = errorData.message || "An error occurred";
+          toast({
+            title: "Uh oh! Something went wrong.",
+            description: errorMessage,
+          });
+        }
+        
     }
+
+
 
     return (   
         
         <Dialog>
             
         <DialogTrigger asChild>
-            <Button >New Exam</Button>
+            {/* <Button >New Exam</Button> */}
+            <Badge>new</Badge>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[825]">
         <DialogHeader>
@@ -77,53 +132,48 @@ export default function ExamForm() {
         <div
             className="relative hidden flex-col items-start gap-8 md:flex" x-chunk="dashboard-03-chunk-0"
           >
-            <form className="grid w-full items-start gap-6">
+            <form className="grid w-full items-start gap-6" onSubmit={handleSubmit}>
               <div className="grid grid-cols-4 gap-4">
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Subject</Label>
-                      <Select defaultValue="">
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="system">Subject</SelectItem>
-                          <SelectItem value="user">Sub Subject</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <ComboListE subjects={subjects} setSelectedStatus={setSubject} selectedStatus={subject}/>
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Session</Label>
-                      <Select defaultValue="">
+                      <Select name="session" value={session}
+                        onValueChange={(value) => setSession(value)}>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a level" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="system">Normal</SelectItem>
-                          <SelectItem value="user">Ratt</SelectItem>
+                          <SelectItem value="NORMAL">NORMAL</SelectItem>
+                          <SelectItem value="RETAKE">RETAKE</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Semester</Label>
-                      <Select defaultValue="">
+                      <Select name="semster" value={semester}
+                        onValueChange={(value) => setSemester(value)}>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a level" />
+                          <SelectValue placeholder="Select a semster" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="system">Print</SelectItem>
-                          <SelectItem value="user">Autom</SelectItem>
+                          <SelectItem value="PRINTEMPS">PRINTEMPS</SelectItem>
+                          <SelectItem value="AUTOMNE">AUTOMNE</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Type</Label>
-                      <Select defaultValue="">
+                      <Select name="type" value={type}
+                        onValueChange={(value) => setType(value)}>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a level" />
+                          <SelectValue placeholder="Select a type" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="system">DS 1</SelectItem>
-                          <SelectItem value="user">Exam</SelectItem>
+                          <SelectItem value="EXAM">EXAM</SelectItem>
+                          <SelectItem value="DS">DS</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -131,54 +181,18 @@ export default function ExamForm() {
               <div className="grid grid-cols-2 gap-4">
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Number of Monitors / Room</Label>
-                      <Input type="number" placeholder="Number of Monitors" value={2}/>
+                      <Input type="number" name="nbr" placeholder="Number of Monitors" value={nbr} onChange={(e) => setNbr(e.target.value)}/>
                     </div>
                     <div className="grid gap-3">
-                      <Label htmlFor="top-k">Coordinator</Label>
-                      <Select defaultValue="">
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a level" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="system">coord 1</SelectItem>
-                          <SelectItem value="user">coord 2</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Label htmlFor="top-k">Paper</Label>
+                      <Input type="file" name="preuve" onChange={handleFileChange}/>
                     </div>
               </div>
-              {/* <div className="grid grid-cols-2 gap-4">
-                    <div className="grid gap-3">
-                      <Label htmlFor="top-k">Professor</Label>
-                      <Select defaultValue="">
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="system">Prof 1</SelectItem>
-                          <SelectItem value="user">Prof 2</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="top-k">Coordinator</Label>
-                      <Select defaultValue="">
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a level" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="system">coord 1</SelectItem>
-                          <SelectItem value="user">coord 2</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-              </div> */}
+              <Button type="submit" disabled={loading}>Save Exam</Button>
             </form>
           </div>
 
 
-        <DialogFooter>
-        <Button type="submit">Save Subject</Button>
-        </DialogFooter>
     </DialogContent>
     </Dialog>
                  

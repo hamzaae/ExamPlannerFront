@@ -24,14 +24,15 @@ import { useRouter } from "next/navigation"
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
 import { ComboList } from "./ComboList"
+import { toast } from "@/components/ui/use-toast"
 
-export function SubjectUpdate({ subject, users, prof, coord }) {
+export function SubjectUpdate({ subject, users, prof, coord , levels}) {
 
   const router = useRouter()
 
   const [title, setTitle] = useState(subject.title || "");
-  const [type, setType] = useState(subject.type || "");
-  const [level, setLevel] = useState(subject.level || "");
+  const [type, setType] = useState(subject.elementType || "");
+  const [level, setLevel] = useState(subject.level.idLevel || "");
   const [professor, setProfessor] = useState(prof || null);
   const [coordinator, setCoordinator] = useState(coord || null);
   const [loading, setLoading] = useState(false);
@@ -44,10 +45,11 @@ export function SubjectUpdate({ subject, users, prof, coord }) {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true);
-    const response = await fetch("http://localhost:4001/users/" + subject.id, {
+    const response = await fetch("http://localhost:8080/api/Educationalelement/" + subject.id, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
+            "Authorization": "Bearer " + localStorage.getItem("token")
         },
         body: JSON.stringify({
             "title": title,
@@ -60,6 +62,14 @@ export function SubjectUpdate({ subject, users, prof, coord }) {
     if (response.ok) {
       router.push("/subjects");
       window.location.reload();
+    } else {
+      setLoading(false)
+      const errorData = await response.json();
+      const errorMessage = errorData.message || "An error occurred";
+      toast({
+        title: "Uh oh! Something went wrong.",
+        description: errorMessage,
+      });
     }
 
 }
@@ -101,8 +111,8 @@ export function SubjectUpdate({ subject, users, prof, coord }) {
                           <SelectValue placeholder="Select a type" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="subject">Subject</SelectItem>
-                          <SelectItem value="subsubject">Sub Subject</SelectItem>
+                          <SelectItem value="ELEMENT">ELEMENT</SelectItem>
+                          <SelectItem value="MODULE">MODULE</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -111,11 +121,16 @@ export function SubjectUpdate({ subject, users, prof, coord }) {
                       <Select name="level" value={level}
                         onValueChange={(value) => setLevel(value)}>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a level" />
+                          <SelectValue placeholder="Select a level">
+                          {levels &&
+                            levels.find((lvl) => lvl.idLevel == level)?.title ||
+                            "Select a level"}
+                          </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="system">AP 1</SelectItem>
-                          <SelectItem value="user">AP 2</SelectItem>
+                          {levels && levels.map((level) => (
+                          <SelectItem value={level.idLevel}>{level.title}</SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </div>
@@ -123,11 +138,7 @@ export function SubjectUpdate({ subject, users, prof, coord }) {
               <div className="grid grid-cols-2 gap-4">
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Professor</Label>
-                      <ComboList
-                        users={users}
-                        setSelectedStatus={setProfessor}
-                        selectedStatus={professor}
-                      />
+                      {users && <ComboList users={users} setSelectedStatus={setProfessor} selectedStatus={professor}/>}
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Coordinator</Label>

@@ -42,11 +42,13 @@ import { GroupForm } from "./GroupForm"
 import useFetch from "../useFetch"
 import UserTable from "./UserTable"
 import AuthenticatedLayout from "@/components/AuthenticatedLayout"
+import GroupTable from "./GroupTable"
 
 
 export default function Users() {
 
     const { error, isPending, data: users } = useFetch('http://localhost:8080/api/personnel')
+    const { errorGr, isPendingGr, data: groups } = useFetch('http://localhost:8080/api/Group')
     const { errorSec, isPendingSec, data: sectors } = useFetch('http://localhost:8080/api/utils/sectors')
 
 
@@ -115,7 +117,39 @@ export default function Users() {
                     </TableHead>
                     </TableRow>
                 </TableHeader>
-                  {users && <UserTable users={users}/>}
+                  {users && <UserTable users={users} sectors={sectors}/>}
+                </Table>
+            </CardContent>
+            <CardFooter>
+                <div className="text-xs text-muted-foreground">
+                Showing <strong>all</strong> of <strong>{users && users.length}</strong>{" "}
+                users.
+                </div>
+            </CardFooter>
+            </Card> }
+            {groups && 
+            <Card x-chunk="dashboard-06-chunk-0">
+            <CardHeader>
+                <CardTitle>Groups</CardTitle>
+                <CardDescription>
+                Manage groups.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Table>
+                <TableHeader>
+                    <TableRow>
+                    <TableHead>Group Name</TableHead>
+                    <TableHead className="hidden md:table-cell">Description</TableHead>
+                    <TableHead>
+                        Count
+                    </TableHead>
+                    <TableHead>
+                        <span className="sr-only">Actions</span>
+                    </TableHead>
+                    </TableRow>
+                </TableHeader>
+                  <GroupTable groups={groups}/>
                 </Table>
             </CardContent>
             <CardFooter>
@@ -126,7 +160,7 @@ export default function Users() {
             </CardFooter>
             </Card> }
             {error && <div>{error}</div>}
-            {isPending && (
+            {isPending && isPendingGr && (
               <div className="fixed inset-0 flex items-center justify-center bg-gray-200 ">
                 <div className="flex flex-col items-center space-y-3">
                   <Skeleton className="h-[325px] w-[750px] rounded-xl" />
