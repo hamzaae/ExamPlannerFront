@@ -11,6 +11,7 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
@@ -19,7 +20,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-export function PopOver({monitoring}) {
+export function PopOver({monitoring, rooms}) {
   // console.log(monitoring)
   return (
     <Popover>
@@ -78,7 +79,7 @@ export function PopOver({monitoring}) {
                       <Input type="number" step="0.25" max={parseInt(monitoring.exam.duration)} placeholder="reel duration" />
                     </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">PV</Label>
                       <Input type="file" placeholder="pv" />
@@ -86,6 +87,21 @@ export function PopOver({monitoring}) {
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Repport</Label>
                       <Input type="file" placeholder="repport" />
+                    </div>
+                    <div className="grid gap-3">
+                      <Label htmlFor="top-k">Rooms</Label>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline">Add Rooms</Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-56">
+                          <DropdownMenuLabel>Panel Position</DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                            {rooms.map((room) => (
+                            <DropdownMenuCheckboxItem checked={rooms.find(room => monitoring.room.idRoom == room.idRoom)} value={room.idRoom}>{room.nameRoom}</DropdownMenuCheckboxItem>
+                            ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
               </div>
             </form>

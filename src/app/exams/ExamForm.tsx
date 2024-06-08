@@ -69,7 +69,7 @@ export default function ExamForm({subjects, room, startTime, date}) {
         if (examResponse.ok) {
             const examData = await examResponse.json();
 
-            const monitorResponse = await fetch("http://localhost:8080/api/monitorings", {
+            const monitorResponse = await fetch("http://localhost:8080/api/monitorings?nbrMonitors="+nbr, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -98,6 +98,15 @@ export default function ExamForm({subjects, room, startTime, date}) {
         }
         }
         else {
+          // delete exam
+          const examId = await examResponse.json();
+          fetch(`http://localhost:8080/api/Exam/` + examId, {
+            method: "DELETE",
+            headers: {
+              "Authorization": "Bearer " + localStorage.getItem("token")
+          },
+          });
+
           setLoading(false)
           const errorData = await examResponse.json();
           const errorMessage = errorData.message || "An error occurred";

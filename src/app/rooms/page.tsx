@@ -41,12 +41,14 @@ import useFetch from "../useFetch"
 import RoomTable from "./RoomTable"
 import { Skeleton } from "@/components/ui/skeleton"
 import AuthenticatedLayout from "@/components/AuthenticatedLayout"
+import { useState } from "react"
 
 
 
 export default function Rooms() {
 
   const { error, isPending, data: rooms } = useFetch('http://localhost:8080/api/Room')
+  const [filterType, setFilter] = useState("All")
 
 
     return (
@@ -69,11 +71,16 @@ export default function Rooms() {
                   <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Filter by type</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuCheckboxItem checked>
+                    <DropdownMenuCheckboxItem checked={filterType == 'All'} onSelect={() => setFilter('All')}>
+                      All
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem checked={filterType == 'Amphie'} onSelect={() => setFilter('Amphie')}>
                       Amphie
                     </DropdownMenuCheckboxItem>
-                    <DropdownMenuCheckboxItem>Room</DropdownMenuCheckboxItem>
-                    <DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem checked={filterType == 'Room'} onSelect={() => setFilter('Room')}>
+                      Room
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem checked={filterType == 'Tp'} onSelect={() => setFilter('Tp')}>
                       Tp
                     </DropdownMenuCheckboxItem>
                   </DropdownMenuContent>
@@ -112,7 +119,7 @@ export default function Rooms() {
                         </TableHead>
                       </TableRow>
                     </TableHeader>
-                    <RoomTable rooms={rooms} />
+                    <RoomTable rooms={filterType == "All" ? rooms : rooms.filter(room => room.type == filterType)} />
                   </Table>
                 </CardContent>
                 <CardFooter>

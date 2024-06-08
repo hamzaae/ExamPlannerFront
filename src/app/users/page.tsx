@@ -4,6 +4,7 @@ import {
   File,
   ListFilter,
   MoreHorizontal,
+  Search,
 
 } from "lucide-react"
 
@@ -43,14 +44,17 @@ import useFetch from "../useFetch"
 import UserTable from "./UserTable"
 import AuthenticatedLayout from "@/components/AuthenticatedLayout"
 import GroupTable from "./GroupTable"
+import { useState } from "react"
+import { Input } from "@/components/ui/input"
 
 
 export default function Users() {
 
+    const [filterType, setFilter] = useState("All")
+    
     const { error, isPending, data: users } = useFetch('http://localhost:8080/api/personnel')
     const { errorGr, isPendingGr, data: groups } = useFetch('http://localhost:8080/api/Group')
     const { errorSec, isPendingSec, data: sectors } = useFetch('http://localhost:8080/api/utils/sectors')
-
 
 
     return (
@@ -70,10 +74,13 @@ export default function Users() {
                   <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Filter by type</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuCheckboxItem checked>
+                    <DropdownMenuCheckboxItem checked={filterType == 'All'} onSelect={() => setFilter('All')}>
+                      All
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem checked={filterType == 'Professor'} onSelect={() => setFilter('Professor')}>
                       Professors
                     </DropdownMenuCheckboxItem>
-                    <DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem checked={filterType == 'Administrator'} onSelect={() => setFilter('Administrator')}>
                       Administrators
                     </DropdownMenuCheckboxItem>
                   </DropdownMenuContent>
@@ -96,6 +103,14 @@ export default function Users() {
                 <CardDescription>
                 Manage users.
                 </CardDescription>
+                <div className="relative ml-auto flex-1 md:grow-0">
+                      <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        type="search"
+                        placeholder="Search..."
+                        className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
+                      />
+                    </div>
             </CardHeader>
             <CardContent>
                 <Table>
@@ -117,7 +132,7 @@ export default function Users() {
                     </TableHead>
                     </TableRow>
                 </TableHeader>
-                  {users && <UserTable users={users} sectors={sectors}/>}
+                  {users && <UserTable users={filterType=="All"? users : users.filter(user => user.type == filterType)} sectors={sectors}/>}
                 </Table>
             </CardContent>
             <CardFooter>

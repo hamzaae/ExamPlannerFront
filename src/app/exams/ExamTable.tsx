@@ -115,16 +115,16 @@ export default function ExamTable({rooms, subjects, date, monitorings}) {
                 {rom.nameRoom}
               </TableCell>
               <TableCell key={1}>
-                {monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom && monitoring.exam.startTime == 8) ? <PopOver monitoring={monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom)} /> : <ExamForm subjects={subjects} room={rom} startTime={8} date={date}/>}
+                {monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom && monitoring.exam.startTime == 8) ? <PopOver monitoring={monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom)} rooms={rooms} /> : <ExamForm subjects={subjects} room={rom} startTime={8} date={date}/>}
               </TableCell>
               <TableCell key={2}>
-              {monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom && monitoring.exam.startTime == 10) ? <PopOver monitoring={monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom)} /> : <ExamForm subjects={subjects} room={rom} startTime={10} date={date}/>}
+              {monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom && monitoring.exam.startTime == 10) ? <PopOver monitoring={monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom)} rooms={rooms}/> : <ExamForm subjects={subjects} room={rom} startTime={10} date={date}/>}
               </TableCell>
               <TableCell key={3}>
-              {monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom && monitoring.exam.startTime == 14) ? <PopOver monitoring={monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom)} /> : <ExamForm subjects={subjects} room={rom} startTime={14} date={date}/>}
+              {monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom && monitoring.exam.startTime == 14) ? <PopOver monitoring={monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom)} rooms={rooms}/> : <ExamForm subjects={subjects} room={rom} startTime={14} date={date}/>}
               </TableCell>
               <TableCell key={4}>
-              {monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom && monitoring.exam.startTime == 16) ? <PopOver monitoring={monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom)} /> : <ExamForm subjects={subjects} room={rom} startTime={16} date={date}/>}
+              {monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom && monitoring.exam.startTime == 16) ? <PopOver monitoring={monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom)} rooms={rooms}/> : <ExamForm subjects={subjects} room={rom} startTime={16} date={date}/>}
               </TableCell>
             </TableRow>
           ))}

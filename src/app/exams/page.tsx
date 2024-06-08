@@ -148,7 +148,7 @@ export default function Exams() {
               <Button type="submit">Search Date</Button> 
             </form>
 
-            <div className="ml-auto flex items-center gap-2">
+            {/* <div className="ml-auto flex items-center gap-2">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="sm" className="h-8 gap-1">
@@ -176,7 +176,7 @@ export default function Exams() {
                     Export
                   </span>
                 </Button>
-              </div>
+              </div> */}
               {subjects && datee && monitorings && rooms &&
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>

@@ -55,6 +55,9 @@ import AuthenticatedLayout from "@/components/AuthenticatedLayout"
     const { error, isPending, data: subjects } = useFetch('http://localhost:8080/api/Educationalelement')
     const { data: users } = useFetch('http://localhost:8080/api/personnel')
     const { data: levels } = useFetch('http://localhost:8080/api/utils/levels')
+    const { data: departements } = useFetch('http://localhost:8080/api/utils/departements')
+
+    // console.log(departements)
     
     
       return (
@@ -65,7 +68,7 @@ import AuthenticatedLayout from "@/components/AuthenticatedLayout"
               </div> */}
 
                 <div className="ml-auto flex items-center gap-2">
-                  <DropdownMenu>
+                  {/* <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline" size="sm" className="h-8 gap-1">
                         <ListFilter className="h-3.5 w-3.5" />
@@ -85,14 +88,14 @@ import AuthenticatedLayout from "@/components/AuthenticatedLayout"
                         Tp
                       </DropdownMenuCheckboxItem>
                     </DropdownMenuContent>
-                  </DropdownMenu>
+                  </DropdownMenu> */}
                   <Button size="sm" variant="outline" className="h-8 gap-1">
                     <File className="h-3.5 w-3.5" />
                     <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                       Export
                     </span>
                   </Button>
-                  <Departements />
+                  {departements && <Departements departements={departements}/>}
                   {users && levels && <SubjectForm users={users} levels={levels} />}
                 </div>
                 {subjects && users && levels && <Card x-chunk="dashboard-06-chunk-0">
@@ -101,14 +104,14 @@ import AuthenticatedLayout from "@/components/AuthenticatedLayout"
                     <CardDescription>
                       Manage subjects.
                     </CardDescription>
-                    <div className="relative ml-auto flex-1 md:grow-0">
+                    {/* <div className="relative ml-auto flex-1 md:grow-0">
                       <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                       <Input
                         type="search"
                         placeholder="Search..."
                         className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
                       />
-                    </div>
+                    </div> */}
                   </CardHeader>
                   <CardContent>
                     <Table>
