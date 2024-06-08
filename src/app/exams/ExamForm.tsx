@@ -84,7 +84,7 @@ export default function ExamForm({subjects, room, startTime, date}) {
             }),
         })
         if (monitorResponse.ok){
-            router.push("/rooms")
+            router.push("/exams")
             window.location.reload();
         }
         else {

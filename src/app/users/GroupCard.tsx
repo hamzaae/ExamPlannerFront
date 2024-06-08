@@ -75,7 +75,7 @@ export function GroupCard({ users, onSelectedMembersChange }) {
                         <CommandList>
                             <CommandEmpty>No users found.</CommandEmpty>
                             <CommandGroup className="p-2">
-                                {users.map((user) => (
+                                {users.filter(user => user.type === 'Professor').map((user) => (
                                     <CommandItem
                                         key={user.email}
                                         className="flex items-center px-2"

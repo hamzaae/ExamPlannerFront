@@ -154,8 +154,8 @@ export default function Users() {
             </CardContent>
             <CardFooter>
                 <div className="text-xs text-muted-foreground">
-                Showing <strong>all</strong> of <strong>{users && users.length}</strong>{" "}
-                users.
+                Showing <strong>all</strong> of <strong>{groups && groups.length}</strong>{" "}
+                groups.
                 </div>
             </CardFooter>
             </Card> }

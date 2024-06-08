@@ -17,10 +17,10 @@ export function DatePicker({ date, setDate }) {
 
   const handleDateChange = (selectedDate) => {
     // Handle date selection here
-    setDate(selectedDate);
-
+    
     // Optionally format the date using date-fns
-    const formattedDate = format(selectedDate, 'yyyy-MM-dd'); 
+    const formattedDate = format(selectedDate, 'dd-MM-yyyy'); 
+    setDate(formattedDate);
     // console.log('Selected date (formatted):', formattedDate); 
   };
   
@@ -35,7 +35,7 @@ export function DatePicker({ date, setDate }) {
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "PPP") : <span>Pick a date</span>}
+          {date ? date : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">

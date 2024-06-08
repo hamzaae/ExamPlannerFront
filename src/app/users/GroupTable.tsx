@@ -58,7 +58,7 @@ const GroupTable = ({groups}) => {
                   {grp.description}
                 </TableCell>
                 <TableCell>
-                  {console.log(grp)}
+                  {grp.professors.length}
                 </TableCell>
                 <TableCell>
                   <DropdownMenu>

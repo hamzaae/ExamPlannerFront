@@ -94,11 +94,14 @@ import LayoutAuthenticated from "@/components/AuthenticatedLayout"
 import ExamTable from "./ExamTable"
 import useFetch from "../useFetch"
 import { Skeleton } from "@/components/ui/skeleton"
+import { useRouter, useSearchParams } from "next/navigation"
 
   
 
 
 export default function Exams() {
+
+  const router = useRouter()
 
   function getTodayDate() {
     const today = new Date();
@@ -109,14 +112,30 @@ export default function Exams() {
     return `${dd}-${mm}-${yyyy}`;
   }
 
-  const [date, setDate] = useState(getTodayDate);
+  const searchParams = useSearchParams();
+  const date = searchParams.get("date");
+
+  const [datee, setDatee] = useState("");
+
+  useEffect(() => {
+    if (date) {
+      setDatee(date);
+    } else {
+      setDatee(getTodayDate);
+    }
+  }, [date]);
+
+  const handleSubmitdate = (event) => {
+    event.preventDefault(); // Prevent default form submission behavior
+    router.push("/exams?date=" + datee);
+    // window.location.reload();
+  };
 
 
-  // setDate(getTodayDate());
 
   const { error, isPending, data: rooms } = useFetch('http://localhost:8080/api/Room')
   const { errors, isPendings, data: subjects } = useFetch('http://localhost:8080/api/Educationalelement')
-  const { errorm, isPendingm, data: monitorings } = useFetch('http://localhost:8080/api/monitorings/date/' + date)
+  const { errorm, isPendingm, data: monitorings } = useFetch('http://localhost:8080/api/monitorings/date/' + datee)
 
 
 
@@ -124,10 +143,9 @@ export default function Exams() {
       <LayoutAuthenticated>
         <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
 
-            <form className="flex items-center gap-4">
-              <DatePicker date={date} setDate={setDate}/>
-              <Button >Search Date</Button> 
-              {date}
+            <form className="flex items-center gap-4" onSubmit={handleSubmitdate}>
+              <DatePicker date={datee} setDate={setDatee}/>
+              <Button type="submit">Search Date</Button> 
             </form>
 
             <div className="ml-auto flex items-center gap-2">
@@ -159,7 +177,7 @@ export default function Exams() {
                   </span>
                 </Button>
               </div>
-              {subjects && date && monitorings && rooms &&
+              {subjects && datee && monitorings && rooms &&
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
                   <CardTitle>Exams</CardTitle>
@@ -168,7 +186,7 @@ export default function Exams() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                   <ExamTable rooms={rooms} monitorings={monitorings} subjects={subjects} date={date}/>
+                   <ExamTable rooms={rooms} monitorings={monitorings} subjects={subjects} date={datee}/>
                 </CardContent>
               </Card>}
               {(isPending || isPendings || isPendingm) && (

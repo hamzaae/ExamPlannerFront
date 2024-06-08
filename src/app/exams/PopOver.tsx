@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export function PopOver({monitoring}) {
+  // console.log(monitoring)
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -27,23 +28,23 @@ export function PopOver({monitoring}) {
           <AvatarFallback>AB</AvatarFallback>
         </Avatar>
       </PopoverTrigger>
-      <PopoverContent className="w-180">
+      <PopoverContent className="w-120">
         <div className="grid gap-4">
           <div className="space-y-2">
             <h4 className="font-medium leading-none">Exam Details</h4>
             <p className="text-sm text-muted-foreground">
-              Get the details for the exam.{monitoring.coordinator.idPerson}
+              Get the details for the exam.
             </p>
           </div>
           <form className="grid w-full items-start gap-6">
-              <div className="grid grid-cols-4 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Subject</Label>
-                      <Input type="text" placeholder="Subject" value="Maths" disabled/>
+                      <Input type="text" placeholder="Subject" value={monitoring.exam.element.title} disabled/>
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Coordinator</Label>
-                      <Input type="text" placeholder="Coordinator" value="Coord 1" disabled/>
+                      <Input type="text" placeholder="Coordinator" value={monitoring.coordinator.firstName + " " + monitoring.coordinator.lastName} disabled/>
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Monitors</Label>
@@ -55,42 +56,36 @@ export function PopOver({monitoring}) {
                           <DropdownMenuLabel>Panel Position</DropdownMenuLabel>
                           <DropdownMenuSeparator />
                           <DropdownMenuRadioGroup >
-                            <DropdownMenuRadioItem disabled value="">Prof 1</DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem disabled value="">Prof 2</DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem disabled value="">Prof 3</DropdownMenuRadioItem>
+                            {monitoring.professors.map((professor) => (
+                            <DropdownMenuRadioItem value="" disabled>{professor.firstName + " " + professor.lastName}</DropdownMenuRadioItem>
+                            ))}
                           </DropdownMenuRadioGroup>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
-                    <div className="grid gap-3">
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+              <div className="grid gap-3">
                       <Label htmlFor="top-k">Type</Label>
-                      <Select defaultValue="">
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a level" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="system">DS 1</SelectItem>
-                          <SelectItem value="user">Exam</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Input type="text" placeholder="Type" value={monitoring.exam.examType} disabled/>
+                    </div>
+                    <div className="grid gap-3">
+                      <Label htmlFor="top-k">Duration</Label>
+                      <Input type="text" placeholder="Duration" value={monitoring.exam.duration} disabled/>
+                    </div>
+                    <div className="grid gap-3">
+                      <Label htmlFor="top-k">Reel Duration</Label>
+                      <Input type="number" step="0.25" max={parseInt(monitoring.exam.duration)} placeholder="reel duration" />
                     </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                     <div className="grid gap-3">
-                      <Label htmlFor="top-k">Number of Monitors / Room</Label>
-                      <Input type="number" placeholder="Number of Monitors" value={2}/>
+                      <Label htmlFor="top-k">PV</Label>
+                      <Input type="file" placeholder="pv" />
                     </div>
                     <div className="grid gap-3">
-                      <Label htmlFor="top-k">Coordinator</Label>
-                      <Select defaultValue="">
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a level" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="system">coord 1</SelectItem>
-                          <SelectItem value="user">coord 2</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Label htmlFor="top-k">Repport</Label>
+                      <Input type="file" placeholder="repport" />
                     </div>
               </div>
             </form>
