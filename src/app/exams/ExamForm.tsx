@@ -33,7 +33,7 @@ import { set } from "date-fns"
 
 
 
-export default function ExamForm({subjects, room, startTime, date}) {
+export default function ExamForm({subjects, rooms, startTime, date}) {
 
     const router = useRouter()
     
@@ -50,73 +50,134 @@ export default function ExamForm({subjects, room, startTime, date}) {
       setPreuve(file);
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        const examResponse = await fetch("http://localhost:8080/api/Exam", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + localStorage.getItem("token")
-            },
-            body: JSON.stringify({
-                "startTime": startTime.toString(),
-                "endTime" : (startTime + 2).toString(),
-                "preuve" : "preuve",
-                "element" : {"idElement": subject},
-            }),
-        })
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault()
+    //     const examResponse = await fetch("http://localhost:8080/api/Exam", {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             "Authorization": "Bearer " + localStorage.getItem("token")
+    //         },
+    //         body: JSON.stringify({
+    //             "startTime": startTime.toString(),
+    //             "endTime" : (startTime + 2).toString(),
+    //             "preuve" : "preuve",
+    //             "element" : {"idElement": subject},
+    //         }),
+    //     })
 
-        if (examResponse.ok) {
-            const examData = await examResponse.json();
+    //     if (examResponse.ok) {
+    //         const examData = await examResponse.json();
 
-            const monitorResponse = await fetch("http://localhost:8080/api/monitorings?nbrMonitors="+nbr, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + localStorage.getItem("token")
-            },
-            body: JSON.stringify({
-                "dateExam": date, 
-                "administrator" : {"idPerson": 1},
-                // "coordinator" : {"idPerson": 1},
-                "room" : {"idRoom": room.idRoom},
-                "exam" : {"idExam": examData},
-            }),
-        })
-        if (monitorResponse.ok){
-            router.push("/exams")
-            window.location.reload();
-        }
-        else {
-          setLoading(false)
-          const errorData = await monitorResponse.json();
-          const errorMessage = errorData.message || "An error occurred";
-          toast({
-            title: "Uh oh! Something went wrong.",
-            description: errorMessage,
-          });
-        }
-        }
-        else {
-          // delete exam
-          const examId = await examResponse.json();
-          fetch(`http://localhost:8080/api/Exam/` + examId, {
-            method: "DELETE",
-            headers: {
-              "Authorization": "Bearer " + localStorage.getItem("token")
-          },
-          });
+    //         const monitorResponse = await fetch("http://localhost:8080/api/monitorings?nbrMonitors="+nbr, {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             "Authorization": "Bearer " + localStorage.getItem("token")
+    //         },
+    //         body: JSON.stringify({
+    //             "dateExam": date, 
+    //             "administrator" : {"idPerson": 1},
+    //             // "coordinator" : {"idPerson": 1},
+    //             "room" : {"idRoom": room.idRoom},
+    //             "exam" : {"idExam": examData},
+    //         }),
+    //     })
+    //     if (monitorResponse.ok){
+    //         router.push("/exams")
+    //         window.location.reload();
+    //     }
+    //     else {
+    //       setLoading(false)
+    //       const errorData = await monitorResponse.json();
+    //       const errorMessage = errorData.message || "An error occurred";
+    //       toast({
+    //         title: "Uh oh! Something went wrong.",
+    //         description: errorMessage,
+    //       });
+    //     }
+    //     }
+    //     else {
+    //       // delete exam
+    //       const examId = await examResponse.json();
+    //       fetch(`http://localhost:8080/api/Exam/` + examId, {
+    //         method: "DELETE",
+    //         headers: {
+    //           "Authorization": "Bearer " + localStorage.getItem("token")
+    //       },
+    //       });
 
-          setLoading(false)
-          const errorData = await examResponse.json();
-          const errorMessage = errorData.message || "An error occurred";
-          toast({
-            title: "Uh oh! Something went wrong.",
-            description: errorMessage,
-          });
-        }
+    //       setLoading(false)
+    //       const errorData = await examResponse.json();
+    //       const errorMessage = errorData.message || "An error occurred";
+    //       toast({
+    //         title: "Uh oh! Something went wrong.",
+    //         description: errorMessage,
+    //       });
+    //     }
         
-    }
+    // }
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+  
+      try {
+          // Create the exam
+          const examResponse = await fetch("http://localhost:8080/api/Exam", {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": "Bearer " + localStorage.getItem("token")
+              },
+              body: JSON.stringify({
+                  "startTime": startTime.toString(),
+                  "endTime": (startTime + 2).toString(),
+                  "preuve": "preuve",
+                  "element": {"idElement": subject}
+              })
+          });
+  
+          if (!examResponse.ok) {
+              throw new Error("Failed to create exam");
+          }
+  
+          const examData = await examResponse.json();
+  
+          // Iterate over all rooms to create monitoring for each room
+          for (const room of rooms) {
+              const monitorResponse = await fetch("http://localhost:8080/api/monitorings?nbrMonitors=" + nbr, {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/json",
+                      "Authorization": "Bearer " + localStorage.getItem("token")
+                  },
+                  body: JSON.stringify({
+                      "dateExam": date,
+                      // "administrator": {"idPerson": 1},
+                      "room": {"idRoom": room},
+                      "exam": {"idExam": examData}
+                  })
+              });
+  
+              if (!monitorResponse.ok) {
+                  throw new Error("Failed to create monitoring");
+              }
+          }
+  
+          // Redirect after successfully creating monitoring for all rooms
+          window.location.reload();
+          router.push("/exams?date=" + date);
+      } catch (error) {
+          setLoading(false);
+          console.error("Error:", error);
+          const errorMessage = error.message || "An error occurred";
+          toast({
+              title: "Uh oh! Something went wrong.",
+              description: errorMessage
+          });
+      }
+  }
+  
 
 
 
@@ -125,8 +186,8 @@ export default function ExamForm({subjects, room, startTime, date}) {
         <Dialog>
             
         <DialogTrigger asChild>
-            {/* <Button >New Exam</Button> */}
-            <Badge>new</Badge>
+            <Button >New Exam</Button>
+            {/* <Badge>new</Badge> */}
         </DialogTrigger>
         <DialogContent className="sm:max-w-[825]">
         <DialogHeader>

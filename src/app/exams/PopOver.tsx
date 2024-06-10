@@ -26,7 +26,7 @@ export function PopOver({monitoring, rooms}) {
     <Popover>
       <PopoverTrigger asChild>
         <Avatar>
-          <AvatarFallback>AB</AvatarFallback>
+          <AvatarFallback>{monitoring.coordinator.lastName[0] + monitoring.coordinator.firstName[0]}</AvatarFallback>
         </Avatar>
       </PopoverTrigger>
       <PopoverContent className="w-120">
@@ -89,19 +89,8 @@ export function PopOver({monitoring, rooms}) {
                       <Input type="file" placeholder="repport" />
                     </div>
                     <div className="grid gap-3">
-                      <Label htmlFor="top-k">Rooms</Label>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="outline">Add Rooms</Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-56">
-                          <DropdownMenuLabel>Panel Position</DropdownMenuLabel>
-                          <DropdownMenuSeparator />
-                            {rooms.map((room) => (
-                            <DropdownMenuCheckboxItem checked={rooms.find(room => monitoring.room.idRoom == room.idRoom)} value={room.idRoom}>{room.nameRoom}</DropdownMenuCheckboxItem>
-                            ))}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                      <Label htmlFor="top-k">Abscence Controller</Label>
+                      <Input type="text" placeholder="Administrator" value={monitoring.administrator.firstName + " " + monitoring.administrator.lastName} disabled/>
                     </div>
               </div>
             </form>

@@ -46,15 +46,69 @@ import AuthenticatedLayout from "@/components/AuthenticatedLayout"
 import GroupTable from "./GroupTable"
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
+import { toast } from "@/components/ui/use-toast"
 
 
 export default function Users() {
 
     const [filterType, setFilter] = useState("All")
+    const [loading, setLoading] = useState(false)
     
     const { error, isPending, data: users } = useFetch('http://localhost:8080/api/personnel')
     const { errorGr, isPendingGr, data: groups } = useFetch('http://localhost:8080/api/Group')
     const { errorSec, isPendingSec, data: sectors } = useFetch('http://localhost:8080/api/utils/sectors')
+
+    const handleDownload = async (e) => {
+      e.preventDefault();
+      setLoading(true);
+  
+      try {
+          const response = await fetch("http://localhost:8080/api/personnel/exportPersons", {
+              method: "GET",
+              headers: {
+                  "Authorization": "Bearer " + localStorage.getItem("token")
+              },
+              // Make sure the response type is set to "blob" to handle binary data (file)
+              responseType: 'blob'
+          });
+  
+          if (!response.ok) {
+              throw new Error("Failed to download file");
+          }
+  
+          // Convert response to blob
+          const blob = await response.blob();
+  
+          // Create a URL for the blob data
+          const url = window.URL.createObjectURL(blob);
+  
+          // Create a temporary <a> element to trigger the download
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', 'downloaded_file.csv'); // Default filename
+  
+          // Append the <a> element to the document body and click it to start download
+          document.body.appendChild(link);
+          link.click();
+  
+          // Cleanup: remove the <a> element and revoke the URL
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+  
+          // Set loading to false after successful download
+          setLoading(false);
+      } catch (error) {
+          setLoading(false);
+          console.error("Error:", error);
+          const errorMessage = error.message || "An error occurred";
+          toast({
+              title: "Uh oh! Something went wrong.",
+              description: errorMessage
+          });
+      }
+  }
+  
+  
 
 
     return (
@@ -85,7 +139,7 @@ export default function Users() {
                     </DropdownMenuCheckboxItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                <Button size="sm" variant="outline" className="h-8 gap-1">
+                <Button size="sm" variant="outline" className="h-8 gap-1" onClick={handleDownload} disabled={loading}>
                   <File className="h-3.5 w-3.5" />
                   <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                     Export
@@ -103,14 +157,14 @@ export default function Users() {
                 <CardDescription>
                 Manage users.
                 </CardDescription>
-                <div className="relative ml-auto flex-1 md:grow-0">
+                {/* <div className="relative ml-auto flex-1 md:grow-0">
                       <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                       <Input
                         type="search"
                         placeholder="Search..."
                         className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
                       />
-                    </div>
+                    </div> */}
             </CardHeader>
             <CardContent>
                 <Table>

@@ -97,6 +97,20 @@ import useFetch from "../useFetch"
 
 export default function ExamTable({rooms, subjects, date, monitorings}) {
 
+  const [selectedRooms, setSelectedRooms] = useState([])
+  const [startTime, setStartTime] = useState(0)
+
+  const handleCheckboxChange = (roomId, t) => {
+    setSelectedRooms((prevSelectedRooms) => {
+      setStartTime(t);
+      if (prevSelectedRooms.includes(roomId)) {
+        return prevSelectedRooms.filter((id) => id !== roomId);
+      } else {
+        return [...prevSelectedRooms, roomId];
+      }
+    });
+  };
+
     return(        
         <Table>
         <TableHeader>
@@ -115,19 +129,21 @@ export default function ExamTable({rooms, subjects, date, monitorings}) {
                 {rom.nameRoom}
               </TableCell>
               <TableCell key={1}>
-                {monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom && monitoring.exam.startTime == 8) ? <PopOver monitoring={monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom)} rooms={rooms} /> : <ExamForm subjects={subjects} room={rom} startTime={8} date={date}/>}
+              {/* <ExamForm subjects={subjects} room={rom} startTime={8} date={date}/> */}
+                {monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom && monitoring.exam.startTime == 8) ? <PopOver monitoring={monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom)} rooms={rooms} /> : <Checkbox key={8} onClick={() => handleCheckboxChange(rom.idRoom, 8)}/>}
               </TableCell>
               <TableCell key={2}>
-              {monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom && monitoring.exam.startTime == 10) ? <PopOver monitoring={monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom)} rooms={rooms}/> : <ExamForm subjects={subjects} room={rom} startTime={10} date={date}/>}
+              {monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom && monitoring.exam.startTime == 10) ? <PopOver monitoring={monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom)} rooms={rooms}/> : <Checkbox key={10} onClick={() => handleCheckboxChange(rom.idRoom, 10)}/> }
               </TableCell>
               <TableCell key={3}>
-              {monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom && monitoring.exam.startTime == 14) ? <PopOver monitoring={monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom)} rooms={rooms}/> : <ExamForm subjects={subjects} room={rom} startTime={14} date={date}/>}
+              {monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom && monitoring.exam.startTime == 14) ? <PopOver monitoring={monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom)} rooms={rooms}/> : <Checkbox key={14} onClick={() => handleCheckboxChange(rom.idRoom, 14)}/>}
               </TableCell>
               <TableCell key={4}>
-              {monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom && monitoring.exam.startTime == 16) ? <PopOver monitoring={monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom)} rooms={rooms}/> : <ExamForm subjects={subjects} room={rom} startTime={16} date={date}/>}
+              {monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom && monitoring.exam.startTime == 16) ? <PopOver monitoring={monitorings.find(monitoring => monitoring.room.idRoom == rom.idRoom)} rooms={rooms}/> : <Checkbox key={16} onClick={() => handleCheckboxChange(rom.idRoom, 16)}/>}
               </TableCell>
             </TableRow>
           ))}
+            <ExamForm subjects={subjects} rooms={selectedRooms} startTime={startTime} date={date}/>
         </TableBody>
 
       </Table>

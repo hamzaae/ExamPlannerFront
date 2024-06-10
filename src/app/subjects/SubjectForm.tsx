@@ -140,11 +140,11 @@ export function SubjectForm({users, levels}) {
               <div className="grid grid-cols-2 gap-4">
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Professor</Label>
-                      {users && <ComboList users={users} setSelectedStatus={setProfessor} selectedStatus={professor}/>}
+                      {users && <ComboList users={users.filter(user => user.type === 'Professor')} setSelectedStatus={setProfessor} selectedStatus={professor}/>}
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Coordinator</Label>
-                      {users && <ComboList users={users} setSelectedStatus={setCoordinator} selectedStatus={coordinator}/>}
+                      {users && <ComboList users={users.filter(user => user.type === 'Professor')} setSelectedStatus={setCoordinator} selectedStatus={coordinator}/>}
                     </div>
               </div>
 

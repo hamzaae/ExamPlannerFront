@@ -145,7 +145,7 @@ export default function Exams() {
 
             <form className="flex items-center gap-4" onSubmit={handleSubmitdate}>
               <DatePicker date={datee} setDate={setDatee}/>
-              <Button type="submit">Search Date</Button> 
+              {/* <Button type="submit">Search Date</Button>  */}
             </form>
 
             {/* <div className="ml-auto flex items-center gap-2">
