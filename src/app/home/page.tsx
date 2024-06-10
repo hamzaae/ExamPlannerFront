@@ -44,10 +44,14 @@ import SideBar from "@/components/SideBar";
 import HeaderBar from "@/components/HeaderBar";
 import Login from "@/components/Login";
 import AuthenticatedLayout from "@/components/AuthenticatedLayout"
+import useFetch from "../useFetch"
 
 
 
 export default function Home() {
+
+  const { error, isPending, data: user } = useFetch('http://localhost:8080/api/auth/profile')
+
 
 
 
@@ -59,7 +63,7 @@ export default function Home() {
                           className="sm:col-span-2" x-chunk="dashboard-05-chunk-0"
                         >
                           <CardHeader className="pb-3">
-                            <CardTitle>Hello Username</CardTitle>
+                            <CardTitle>Hello {user}</CardTitle>
                             <CardDescription className="max-w-lg text-balance leading-relaxed">
                               Introducing Our Dynamic Orders Dashboard for Seamless
                               Management and Insightful Analysis.

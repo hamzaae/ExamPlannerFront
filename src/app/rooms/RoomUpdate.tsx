@@ -42,7 +42,7 @@ export default function RoomUpdate({room}) {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const response = await fetch("http://localhost:8080/api/Room" + roomName.idRoom, {
+        const response = await fetch("http://localhost:8080/api/Room/" + room.idRoom, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

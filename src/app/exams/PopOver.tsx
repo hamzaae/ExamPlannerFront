@@ -1,3 +1,5 @@
+"use client"
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -19,14 +21,68 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useState } from "react"
+import { toast } from "@/components/ui/use-toast"
+import { useRouter } from "next/navigation"
 
 export function PopOver({monitoring, rooms}) {
+  const router = useRouter()
+
+  // console.log(monitoring)
+  
+  const [report, setReport] = useState(null);
+  const [pvFile, setPvFile] = useState(null);
+  const [duree, setDuree] = useState(monitoring.exam.reelDuration != null ? monitoring.exam.reelDuration : monitoring.exam.duration);
+
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    if (name === 'report') setReport(files[0]);
+    if (name === 'pvFile') setPvFile(files[0]);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!report || !pvFile ) {
+      // toast ({message: 'All files are required'})
+      // setError('All files are required');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('report', report);
+    formData.append('pvFile', pvFile);
+
+
+    try {
+      const response = await fetch(`http://localhost:8080/api/Exam/report/${monitoring.exam.idExam}?duree=`+1, {
+        method: 'POST',
+        headers: {
+          "Authorization": "Bearer " + localStorage.getItem("token")
+      },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('File upload failed');
+      }
+
+      const result = await response.json();
+      // setSuccess('Files uploaded successfully');
+      // setError(null);
+      console.log(result);
+      window.location.reload();
+      router.push("/exams?date=" + date);
+    } catch (err) {
+      // setError(err.message);
+      // setSuccess(null);
+      console.error(err);
+    }
+  };
   // console.log(monitoring)
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Avatar>
-          <AvatarFallback>{monitoring.coordinator.lastName[0] + monitoring.coordinator.firstName[0]}</AvatarFallback>
+          <AvatarFallback>{monitoring.exam.reelDuration == null ? monitoring.coordinator.lastName[0] + monitoring.coordinator.firstName[0] : "✓"}</AvatarFallback>
         </Avatar>
       </PopoverTrigger>
       <PopoverContent className="w-120">
@@ -37,7 +93,7 @@ export function PopOver({monitoring, rooms}) {
               Get the details for the exam.
             </p>
           </div>
-          <form className="grid w-full items-start gap-6">
+          <form className="grid w-full items-start gap-6" onSubmit={handleSubmit}>
               <div className="grid grid-cols-3 gap-4">
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Subject</Label>
@@ -54,7 +110,7 @@ export function PopOver({monitoring, rooms}) {
                           <Button variant="outline">Open</Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-56">
-                          <DropdownMenuLabel>Panel Position</DropdownMenuLabel>
+                          <DropdownMenuLabel>Professors</DropdownMenuLabel>
                           <DropdownMenuSeparator />
                           <DropdownMenuRadioGroup >
                             {monitoring.professors.map((professor) => (
@@ -76,23 +132,26 @@ export function PopOver({monitoring, rooms}) {
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Reel Duration</Label>
-                      <Input type="number" step="0.25" max={parseInt(monitoring.exam.duration)} placeholder="reel duration" />
+                      <Input type="text" name="duree" value={duree} onChange={(e) => setDuree(e.target.value)} placeholder="reel duration" disabled={monitoring.exam.reelDuration != null}/>
                     </div>
               </div>
               <div className="grid grid-cols-3 gap-4">
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">PV</Label>
-                      <Input type="file" placeholder="pv" />
+                      {monitoring.exam.reelDuration != null ? <Input type="text" placeholder="pv" value={monitoring.exam.pv} disabled/> : 
+                      <Input type="file" placeholder="pv" name="pvFile" onChange={handleFileChange} /> }
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Repport</Label>
-                      <Input type="file" placeholder="repport" />
+                      {monitoring.exam.reelDuration != null ? <Input type="text" placeholder="repport" value={monitoring.exam.rapport} disabled/> : 
+                      <Input type="file" placeholder="repport" name="report" onChange={handleFileChange} /> }
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="top-k">Abscence Controller</Label>
                       <Input type="text" placeholder="Administrator" value={monitoring.administrator.firstName + " " + monitoring.administrator.lastName} disabled/>
                     </div>
               </div>
+              <Button type="submit" disabled={monitoring.exam.reelDuration != null}>Validate</Button>
             </form>
         </div>
       </PopoverContent>
